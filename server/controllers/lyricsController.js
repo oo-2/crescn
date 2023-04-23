@@ -30,11 +30,19 @@ const searchSong = async (req, res) => {
             json: true
       };
       request.get(options, function(error, response, body) {
-          console.log(error);
+        if (error) {
+          res.status(response.statusCode).send(error)
+        } else {
           var results = body.tracks.items;
           results = results.slice(0, 10);
-          results = results.map( (item) => { return {track_id: item.id, track_name: item.name, artist_name: item.artists[0].name}})
-          res.json(results);
+          res.json(results.map( (item) => { 
+          return {
+              track_id: item.id, 
+              track_name: item.name, 
+              artist_name: item.artists[0].name
+            };
+          }));
+        }
       });
       }
   });
