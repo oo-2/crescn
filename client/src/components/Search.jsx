@@ -15,7 +15,7 @@ const Search = ({label, undertext}) => {
     if (query.trim() !== '') {
       try {
         await fetch(
-          `http://localhost:3001/api/lyrics/search/${query}`
+          `http://localhost:3001/api/lyrics/search/${encodeURIComponent(query)}`
         ).then(res => res.json()).then(data => setResults(data));
         setError(null);
         setShowResults(true);
@@ -35,7 +35,8 @@ const Search = ({label, undertext}) => {
   }
 
   const handleResultClick = async (e) => {
-    await fetch(`https://spotify-lyric-api.herokuapp.com/?trackid=${e.track_id}`)
+
+    await fetch(`http://10.0.0.63:3001/api/lyrics/${e.artist_name}/${e.track_name}/${e.track_id}`)
     .then(res => res.json())    
     .catch(error => {
       console.error('Error:', error);
@@ -44,11 +45,8 @@ const Search = ({label, undertext}) => {
       setShowResults(true);
     })
     .then(data => {
-      
-      if (Object.values(data).length > 2)
-        setLyrics(Object.values(data)[2])
-      else
-        setLyrics([])
+      console.log(data)
+      setLyrics(data)
       setSelectedResult(e);
       setShowResults(false);
     });
@@ -66,7 +64,10 @@ const Search = ({label, undertext}) => {
           value={query}
           
           onChange={(e) => setQuery(e.target.value)}
-          class="w-full bg-gray-800 rounded border bg-opacity-40 border-gray-700 focus:ring-2 focus:bg-purple-900 focus:bg-transparent focus:border-purple-700 text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
+          class="w-full bg-slate-800 rounded border
+          focus:ring-2  focus:border-purple-700 focus:bg-opacity-50
+          hover:ring-1  hover:border-purple-500 hover:bg-opacity-80
+          text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out" />
         </div>
         <button type="submit" class="inline-flex text-white bg-purple-700 border-0 py-2 px-6 focus:outline-none hover:bg-purple-900 rounded text-lg">Search</button>
       </form>

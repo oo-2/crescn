@@ -5,7 +5,9 @@ const Footer = () => {
   return (
   <footer class="text-gray-400 body-font mt-auto w-full">
     <div class="px-5 py-3 w-full flex sm:flex-row flex-col items-center">
-      <img alt="Crescn Logo" src={Logo} class="w-auto" />
+    <a href="/" target="_blank" rel="noreferrer">
+      <img alt="Crescn Logo" src={Logo} />
+    </a>
       <p class="text-sm sm:ml-4 sm:pl-4 sm:border-l sm:border-gray-100 sm:py-2">&copy; 2023</p>
       <span class="inline-flex sm:ml-auto">
         <a href="https://github.com/oo-2" target="_blank" rel="noreferrer">

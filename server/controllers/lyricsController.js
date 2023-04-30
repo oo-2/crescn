@@ -1,8 +1,6 @@
 var request = require('request');
 const config = require('config');
-
-
-
+const Lyric = require('../models/lyricsModel');
 
 const searchSong = async (req, res) => {
   var client_id = config.get('Spotify.client_id');
@@ -31,8 +29,9 @@ const searchSong = async (req, res) => {
       };
       request.get(options, function(error, response, body) {
         if (error) {
-          res.status(response.statusCode).send(error)
+          res.json({ error: 'Not found' })
         } else {
+
           var results = body.tracks.items;
           results = results.slice(0, 10);
           res.json(results.map( (item) => { 
@@ -50,7 +49,40 @@ const searchSong = async (req, res) => {
 
 
 const getLyrics = async (req, res) => {
-    res.json("https://github.com/akashrchandran/spotify-lyrics-api")
+    // https://github.com/akashrchandran/spotify-lyrics-api
+    var header = {
+      url: `https://spotify-lyric-api.herokuapp.com/?trackid=${req.params.id}`,
+      json: true
+    };
+    
+    request.get(header, function(error, response, body) {
+      if (error) {
+        res.json({ error: 'Not found' })
+      } else {
+        if (Object.values(body).length > 2) {
+          var data = Object.values(body)[2];
+          data = data.map((lyric, index) => {
+            const nextLyric = data[index + 1];
+            const endTimeMs = nextLyric ? nextLyric.startTimeMs : null;
+        
+            return {
+              words: lyric.words,
+              startTimeMs: lyric.startTimeMs,
+              endTimeMs: endTimeMs,
+            };
+          });
+        data.pop()
+        const storeLyric = new Lyric({
+          track_name: req.params.title,
+          artist_name: req.params.artist,
+          lyrics: data
+        });
+        storeLyric.save();
+        } else
+          data = [];
+        res.json(data);
+      }
+    });
 };
 
 module.exports = {searchSong, getLyrics};
