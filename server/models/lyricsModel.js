@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const lyricSchema = new mongoose.Schema({
   track_name: { type: String, required: true },
@@ -7,11 +7,11 @@ const lyricSchema = new mongoose.Schema({
     {
       words: { type: String },
       startTimeMs: { type: Number },
-      endTimeMs: { type: Number }
-    }
-  ]
+      endTimeMs: { type: Number },
+    },
+  ],
 });
 
-const Lyric = mongoose.model('Lyric', lyricSchema);
+const Lyric = mongoose.model("Lyric", lyricSchema);
 
 module.exports = Lyric;
