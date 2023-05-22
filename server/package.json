@@ -16,6 +16,7 @@
     "mongoose": "^7.0.3",
     "request": "^2.88.2",
     "throttle": "^1.0.3",
+    "uuid": "^9.0.0",
     "youtube-music-api": "^1.0.6",
     "ytdl-core": "^4.9.1"
   },

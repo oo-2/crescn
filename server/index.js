@@ -9,12 +9,12 @@ connectDB();
 app.use(
   cors({
     origin: "*",
-    methods: ["GET"],
   })
 );
 app.use("/api", require("./routes/lyricsRoutes"));
 app.use("/api", require("./routes/audioRoutes"));
-app.get("/", (req, res) => res.send("😊"));
+app.use("/api", require("./routes/songRoutes"));
+
 
 const port = process.env.PORT || 3001;
 

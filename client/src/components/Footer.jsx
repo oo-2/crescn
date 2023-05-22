@@ -5,7 +5,7 @@ import Linkedin from "../icons/Linkedin.svg";
 
 const Footer = () => {
   return (
-    <footer class="text-gray-400 body-font mt-auto w-full">
+    <footer class="text-gray-400 body-font mt-auto w-full flex-shrink">
       <div class="px-5 py-3 w-full flex sm:flex-row flex-col items-center">
         <a href="/" rel="noreferrer">
           <img alt="Crescn Logo" src={Logo} />

@@ -1,62 +1,37 @@
 import React, { useState } from "react";
-import SongPage from "../pages/Song";
+import { Link } from "react-router-dom";
 
 const Search = ({ label, undertext }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [error, setError] = useState(null);
   const [showResults, setShowResults] = useState(false);
-  const [selectedResult, setSelectedResult] = useState(null);
-  const [lyrics, setLyrics] = useState([]);
 
   const searchQuery = async (e) => {
     e.preventDefault();
     if (query.trim() !== "") {
       try {
         await fetch(
-          `http://localhost:3001/api/lyrics/search/${encodeURIComponent(query)}`
+          `http://10.0.0.63:3001/api/song/search/${encodeURIComponent(query)}`
         )
           .then((res) => res.json())
           .then((data) => setResults(data));
         setError(null);
         setShowResults(true);
-        setSelectedResult(null);
       } catch (error) {
         setError("An error occurred while searching. Please try again later.");
         setResults([]);
         setShowResults(false);
-        setSelectedResult(null);
       }
     } else {
       setError("Please provide a search query");
       setResults([]);
       setShowResults(false);
-      setSelectedResult(null);
     }
   };
 
-  const handleResultClick = async (e) => {
-    await fetch(
-      `http://10.0.0.63:3001/api/lyrics/${encodeURIComponent(
-        e.artist_name
-      )}/${encodeURIComponent(e.track_name)}/${e.track_id}`
-    )
-      .then((res) => res.json())
-      .catch((error) => {
-        console.error("Error:", error);
-        setLyrics([]);
-        setSelectedResult(null);
-        setShowResults(true);
-      })
-      .then((data) => {
-        setLyrics(data);
-        setSelectedResult(e);
-        setShowResults(false);
-      });
-  };
-
   return (
-    <div class="w-full md:w-2/3 flex flex-col mb-16 items-center text-center">
+    <div class="w-full md:w-2/3 flex flex-col items-center text-center">
       <form onSubmit={searchQuery} class="flex w-full justify-center items-end">
         <div class="relative mr-4 lg:w-full xl:w-1/2 w-2/4 md:w-full text-left">
           <label for="search" class="leading-7 text-sm text-gray-400">
@@ -90,12 +65,19 @@ const Search = ({ label, undertext }) => {
               results.map((result) => (
                 <li
                   key={result.track_id}
-                  onClick={() => handleResultClick(result)}
                   class="hover:bg-purple-900 hover:text-gray-100 rounded text-gray-300 py-1 px-3 leading-7 transition-colors ease-in-out"
                 >
-                  <h3>
-                    {result.artist_name} - {result.track_name}
-                  </h3>
+                  <Link
+                    to={`/song/${result._id}`}
+                    state={{
+                      track_name: result.track_name,
+                      artist_name: result.artist_name,
+                    }}
+                  >
+                    <h3>
+                      {result.artist_name} - {result.track_name}
+                    </h3>
+                  </Link>
                 </li>
               ))
             ) : (
@@ -103,13 +85,6 @@ const Search = ({ label, undertext }) => {
             )}
           </ul>
         </div>
-      )}
-      {selectedResult && (
-        <SongPage
-          track_name={selectedResult.track_name}
-          artist_name={selectedResult.artist_name}
-          lyrics={lyrics}
-        />
       )}
     </div>
   );

@@ -10,9 +10,8 @@ const getAudio = async (req, res) => {
       res.json({ error: "Not found" });
     }
     var song = result.content[0];
-    // check for best match in results i.e. check which has year, artist, and title if not
     url = `http://www.youtube.com/watch?v=${song.videoId}`;
-    // console.log(song);
+   
   });
 
   let info = await ytdl.getInfo(url);

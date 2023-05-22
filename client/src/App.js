@@ -1,24 +1,23 @@
-import React from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from 'react-router-dom'
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from './pages/Home';
+import Home from "./pages/Home";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Song from "./pages/Song";
 
-import Footer from './components/Footer'
 
 function App() {
   return (
-    <section class="body-font min-h-screen flex flex-col">
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-      </Routes>
-    </BrowserRouter>
-          <Footer/>
-      </section>
-  )
+    <section>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/song/:artist_name/:track_name/" element={<Song />} />
+          <Route path="/song/:uuid" element={<Song />} />
+          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+        </Routes>
+      </BrowserRouter>
+    </section>
+  );
 }
 export default App;

@@ -20,18 +20,17 @@ const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
   }
 
   return (
-    <div class="text-white mt-3">
-      <ul class=" bg-gray-800 rounded border-gray-700 ">
+    <div class="text-white w-full text-center text-lg">
         {lyrics.length > 0 ? (
-          <ul ref={lyricsRef}>
+          <ul className=" bg-gray-800 rounded" ref={lyricsRef}>
             {lyrics.map((lyric, index) => (
               <li
                 key={lyric.startTimeMs}
                 onClick={(event) => handleLyricClick(event, lyric.startTimeMs)}
                 className={
                   index === activeIndex
-                    ? `rounded text-gray-100 text-lg bg-purple-700 py-1 px-3 leading-7 transition-colors ease-in-out `
-                    : `hover:bg-purple-900 hover:text-gray-100 rounded text-gray-300 py-1 px-3 leading-7 transition-colors ease-in-out `
+                    ? `rounded text-gray-100 text-xl bg-purple-700 py-1 leading-7 transition-colors ease-in-out `
+                    : `hover:bg-purple-900 hover:text-gray-100 rounded text-gray-300 py-2 transition-colors ease-in-out `
                 }
               >
                 <p>{lyric.words}</p>
@@ -39,9 +38,10 @@ const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
             ))}
           </ul>
         ) : (
-          <p className="text-base text-gray-100 py-1 px-3">No lyrics found</p>
+          <div className="h-screen flex bg-gray-800">
+            <p className="m-auto text-2xl">No lyrics found</p>
+          </div>
         )}
-      </ul>
     </div>
   );
 };

@@ -42,7 +42,6 @@ const MusicPlayer = ({
     };
     document.addEventListener("keydown", handleKeyDown);
 
-    // cleanup function to remove event listener
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
@@ -82,13 +81,13 @@ const MusicPlayer = ({
   };
 
   return (
-    <div className="bg-gray-800 text-white rounded-lg w-full fixed bottom-0 left-0 right-0 ">
+    <div className="bg-gray-800 text-white rounded-lg w-full fixed bottom-0 left-0 right-0">
       <h2 className="pt-2 pb-2 bg-gray-600 rounded bg-opacity-80">
         {track_name} by {artist_name}
       </h2>
       <audio
         ref={audioRef}
-        src={`http://localhost:3001/api/audio/${encodeURIComponent(
+        src={`http://10.0.0.63:3001/api/audio/${encodeURIComponent(
           `${track_name} - ${artist_name}`
         )}`}
         onTimeUpdate={handleTimeUpdate}
@@ -100,7 +99,7 @@ const MusicPlayer = ({
         </button>
         <button for="slider" className="mx-1" onClick={handlePlayPause}>
           {isPaused() ? (
-            <img alt="Play Button" src={Play} />
+            <img alt="Play Button" src={Play} className="" />
           ) : (
             <img alt="Pause Button" src={Pause} />
           )}
@@ -109,7 +108,7 @@ const MusicPlayer = ({
           <img alt="Skip Forward" src={SkipForward} />
         </button>
       </div>
-      <div className="flex w-full items-center justify-center flex-wrap pb-0.5">
+      <div className="flex w-full items-center justify-center flex-wrap">
         <div className="container">
           <label for="slider" className="text-sm">
             {formatTime(currentTime)}
@@ -126,8 +125,8 @@ const MusicPlayer = ({
             {formatTime(duration)}
           </label>
         </div>
-        <div className="md:right-0 md:absolute md:w-1/3 pl-9 flex flex-wrap mb-10 md:mb-0">
-          <button onClick={muteAudio} >
+        <div className="md:right-0 md:absolute md:w-1/3 pl-9 flex flex-wrap">
+          <button onClick={muteAudio}>
             <VolumeIcon volume={volume} />
           </button>
           <input
