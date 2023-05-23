@@ -1,23 +1,20 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Song from "./pages/Song";
-
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
-    <section>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/song/:artist_name/:track_name/" element={<Song />} />
-          <Route path="/song/:uuid" element={<Song />} />
-          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-        </Routes>
-      </BrowserRouter>
-    </section>
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route exact path="/song/:uuid" element={<Song />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/404" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 export default App;

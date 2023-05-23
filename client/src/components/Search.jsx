@@ -12,7 +12,7 @@ const Search = ({ label, undertext }) => {
     if (query.trim() !== "") {
       try {
         await fetch(
-          `http://10.0.0.63:3001/api/song/search/${encodeURIComponent(query)}`
+          `http://localhost:3001/api/song/search/${encodeURIComponent(query)}`
         )
           .then((res) => res.json())
           .then((data) => setResults(data));
@@ -42,15 +42,15 @@ const Search = ({ label, undertext }) => {
             name="search-input"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            class="w-full bg-slate-800 rounded border
-          focus:ring-2  focus:border-purple-700 focus:bg-opacity-50
-          hover:ring-1  hover:border-purple-500 hover:bg-opacity-80
+            class="w-full bg-slate-800 rounded
+          focus:ring-2  focus:ring-purple-700 focus:bg-opacity-50
+          hover:ring-1  hover:ring-purple-500 hover:bg-opacity-80
           text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
           />
         </div>
         <button
           type="submit"
-          class="inline-flex text-white bg-purple-700 border-0 py-2 px-6 focus:outline-none hover:bg-purple-900 rounded text-lg"
+          class="text-white bg-purple-700 hover:bg-purple-800 py-2 px-6 rounded text-lg"
         >
           Search
         </button>
@@ -69,10 +69,7 @@ const Search = ({ label, undertext }) => {
                 >
                   <Link
                     to={`/song/${result._id}`}
-                    state={{
-                      track_name: result.track_name,
-                      artist_name: result.artist_name,
-                    }}
+                    
                   >
                     <h3>
                       {result.artist_name} - {result.track_name}

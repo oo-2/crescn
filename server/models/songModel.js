@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const songSchema = new mongoose.Schema({
   _id: { type: String, required: true },
   track_name: { type: String, required: true },
-  track_id: { type: String, required: true },
+  track_id: { type: String, required: false },
   artist_name: { type: String, required: true },
   duration: { type: Number, required: true },
   other_artist: [

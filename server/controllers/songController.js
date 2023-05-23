@@ -37,7 +37,7 @@ const searchSong = async (req, res) => {
       };
       request.get(options, function (error, response, body) {
         if (error) {
-          res.json({ error: "Not found" });
+          res.status(404).json({ error: "Lyrics not found" });
         } else {
           var results = body.tracks.items;
           results = results.slice(0, 15);
@@ -92,5 +92,52 @@ const searchSong = async (req, res) => {
   });
 };
 
+async function getArtist(req, res) {
+  const uuid = req.params.uuid;
+  try {
+    const song = await Song.findOne({ _id: uuid });
+    if (song) {
+      res.json({ artist_name: song.artist_name });
+    } else {
+      res.status(404).json({ error: "Song not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 
-module.exports = { searchSong };
+async function getTrack(req, res) {
+  const uuid = req.params.uuid;
+  try {
+    const song = await Song.findOne({ _id: uuid });
+    if (song) {
+      res.json({ track_name: song.track_name });
+    } else {
+      res.status(404).json({ error: "Song not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+async function getSong(req, res) {
+  const uuid = req.params.uuid;
+  try {
+    const song = await Song.findOne({ _id: uuid });
+    if (song) {
+      res.json({
+        artist_name: song.artist_name,
+        track_name: song.track_name,
+        duration: song.duration,
+        lyrics: song.lyrics,
+        track_id: song.track_id,
+      });
+    } else {
+      res.status(404).json({ error: "Song not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+module.exports = { searchSong, getArtist, getTrack, getSong };

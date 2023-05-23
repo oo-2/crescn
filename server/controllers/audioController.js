@@ -7,7 +7,7 @@ const getAudio = async (req, res) => {
   await music.initalize();
   await music.search(req.params.query, "song").then((result) => {
     if (Object.values(result.content).length < 1) {
-      res.json({ error: "Not found" });
+      res.status(404).json({ error: "Audio not found" });
     }
     var song = result.content[0];
     url = `http://www.youtube.com/watch?v=${song.videoId}`;

@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import Logo from "../icons/Logo.svg";
 import MusicPlayer from "../components/MusicPlayer";
 import Lyrics from "../components/Lyrics";
 import Footer from "../components/Footer";
+import Loading from "../components/Loading";
 
 const Song = () => {
   const audioRef = useRef(null);
@@ -14,26 +15,50 @@ const Song = () => {
   const [duration, setDuration] = useState(0);
   const [lyrics, setLyrics] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-
+  const navigate = useNavigate();
   const { uuid } = useParams();
-  const track_name = useLocation().state.track_name;
-  const artist_name = useLocation().state.artist_name;
+  const [track_name, setTrack] = useState("");
+  const [artist_name, setArtist] = useState("");
 
   useEffect(() => {
-    const fetchLyrics = async () => {
-      await fetch(`http://10.0.0.63:3001/api/lyrics/${uuid}`)
+    const fetchSong = async () => {
+      var track_id = null;
+
+      await fetch(`http://localhost:3001/api/song/${uuid}`)
         .then((res) => res.json())
         .catch((error) => {
           console.error("Error:", error);
-          setLyrics([]);
         })
         .then((data) => {
-          setLyrics(data);
+          if (data && !data.error) {
+            setArtist(data.artist_name);
+            setTrack(data.track_name);
+            setDuration(data.duration / 1000);
+            if (!data.lyrics.length) {
+              track_id = data.track_id;
+            } else {
+              setLyrics(data.lyrics);
+            }
+          } else {
+            navigate("localhost:3000/404");
+          }
         });
+
+      if (track_id)
+        await fetch(`http://localhost:3001/api/lyrics/${track_id}`)
+          .then((res) => res.json())
+          .catch((error) => {
+            console.error("Error:", error);
+            setLyrics([]);
+          })
+          .then((data) => {
+            if (data) setLyrics(data);
+            else setLyrics([]);
+          });
       setIsLoading(false);
     };
-    fetchLyrics();
-  }, [track_name, artist_name, uuid]);
+    fetchSong();
+  }, [navigate, uuid]);
 
   function handleTimeUpdate() {
     if (!audioRef.current) return;
@@ -56,49 +81,33 @@ const Song = () => {
           src={Logo}
         />
         {isLoading ? (
-          <div class="text-white flex w-full justify-center bg-gray-800 rounded h-screen">
-            <svg
-              class="animate-spin max-h-12 sm:max-h-16 m-auto"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
+          <div class="flex w-full justify-center items-center bg-gray-800 rounded h-screen">
+            <Loading />
           </div>
         ) : (
-          <Lyrics
-            audioRef={audioRef}
-            lyrics={lyrics}
-            activeIndex={activeIndex}
-          />
+          <>
+            <Lyrics
+              audioRef={audioRef}
+              lyrics={lyrics}
+              activeIndex={activeIndex}
+            />
+            <div class="w-full md:w-2/3 flex flex-col items-center text-center">
+              <MusicPlayer
+                track_name={track_name}
+                artist_name={artist_name}
+                audioRef={audioRef}
+                currentTime={currentTime}
+                setCurrentTime={setCurrentTime}
+                duration={duration}
+                setDuration={setDuration}
+                handleTimeUpdate={handleTimeUpdate}
+                volume={volume}
+                setVolume={setVolume}
+              />
+            </div>
+          </>
         )}
-        <div class="w-full md:w-2/3 flex flex-col items-center text-center">
-          <MusicPlayer
-            track_name={track_name}
-            artist_name={artist_name}
-            audioRef={audioRef}
-            currentTime={currentTime}
-            setCurrentTime={setCurrentTime}
-            duration={duration}
-            setDuration={setDuration}
-            handleTimeUpdate={handleTimeUpdate}
-            volume={volume}
-            setVolume={setVolume}
-          />
-        </div>
+
         <Footer />
       </div>
     </div>

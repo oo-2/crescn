@@ -87,7 +87,7 @@ const MusicPlayer = ({
       </h2>
       <audio
         ref={audioRef}
-        src={`http://10.0.0.63:3001/api/audio/${encodeURIComponent(
+        src={`http://localhost:3001/api/audio/${encodeURIComponent(
           `${track_name} - ${artist_name}`
         )}`}
         onTimeUpdate={handleTimeUpdate}
