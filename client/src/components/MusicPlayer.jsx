@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import VolumeIcon from "./VolumeIcon";
 import SkipForward from "../icons/SkipForward.svg";
 import SkipBackward from "../icons/SkipBackward.svg";
@@ -23,55 +23,79 @@ const MusicPlayer = ({
   setVolume,
   handleTimeUpdate,
 }) => {
-  const handlePlayPause = useCallback(() => {
-    if (audioRef.current.paused) audioRef.current.play();
-    else audioRef.current.pause();
+  const [buffering, setBuffering] = useState(false);
+  const [paused, setPaused] = useState(true);
+
+  const play = useCallback(() => {
+    if (audioRef.current) {
+      setPaused(false);
+      audioRef.current.play();
+    }
   }, [audioRef]);
 
-  const isPaused = () => {
-    if (audioRef.current) return audioRef.current.paused;
-    return false;
-  };
+  const pause = useCallback(() => {
+    if (audioRef.current) {
+      setPaused(true);
+      audioRef.current.pause();
+    }
+  }, [audioRef]);
 
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.code === "Space") {
-        event.preventDefault();
-        handlePlayPause();
-      }
-    };
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [handlePlayPause]);
-
-  useEffect(() => {
+    const audioElement = audioRef.current;
     const storedVolume = localStorage.getItem("volume");
     if (storedVolume) {
       setVolume(parseFloat(storedVolume));
       audioRef.current.volume = storedVolume / 100;
     }
-  });
+    const handleKeydown = (event) => {
+      event.preventDefault();
+      if (!buffering && event.code === "Space") {
+        if (paused) {
+          play();
+        } else {
+          pause();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeydown);
+    audioElement.addEventListener("loadstart", () => setBuffering(true));
+    audioElement.addEventListener("seeking", () => setBuffering(true));
+    audioElement.addEventListener("canplay", () => setBuffering(false));
+    audioElement.addEventListener("ended", () => setPaused(true));
+    return () => {
+      window.removeEventListener("keydown", handleKeydown);
+      audioElement.removeEventListener("loadstart", () => setBuffering(true));
+      audioElement.removeEventListener("seeking", () => setBuffering(true));
+      audioElement.removeEventListener("canplay", () => setBuffering(false));
+      audioElement.addEventListener("ended", () => setPaused(true));
+    };
+  }, [setVolume, audioRef, paused, buffering, pause, play]);
 
   const handleLoadedMetadata = (e) => {
     setDuration(e.target.duration);
-    audioRef.current.play();
   };
 
   const handleVolumeChange = (event) => {
+    if (localStorage.getItem("premute")) localStorage.removeItem("premute");
     setVolume(event.target.value);
     localStorage.setItem("volume", event.target.value);
     audioRef.current.volume = event.target.value / 100;
   };
 
   const muteAudio = () => {
-    console.log(volume);
-    console.log(audioRef.current.volume);
-    setVolume(0);
-    localStorage.setItem("volume", 0);
-    audioRef.current.volume = 0;
+    if (localStorage.getItem("premute")) {
+      audioRef.current.volume =
+        parseFloat(localStorage.getItem("premute")) / 100;
+      setVolume(parseFloat(localStorage.getItem("premute")));
+      localStorage.setItem("volume", audioRef.current.volume * 100);
+      localStorage.removeItem("premute");
+    } else {
+      localStorage.setItem("premute", audioRef.current.volume * 100);
+      setVolume(0);
+      localStorage.setItem("volume", 0);
+      audioRef.current.volume = 0;
+    }
   };
 
   const handleSeek = (event) => {
@@ -94,18 +118,45 @@ const MusicPlayer = ({
         onLoadedMetadata={handleLoadedMetadata}
       ></audio>
       <div className="mt-1 flex justify-center align-middle">
-        <button onClick={() => (audioRef.current.currentTime -= 15)}>
-          <img alt="Skip Backward" src={SkipBackward} />
+        <button
+          onClick={() => (audioRef.current.currentTime -= 15)}
+          disabled={buffering}
+        >
+          <img
+            alt="Skip Backward"
+            src={SkipBackward}
+            className={buffering ? "cursor-not-allowed" : ""}
+          />
         </button>
-        <button for="slider" className="mx-1" onClick={handlePlayPause}>
-          {isPaused() ? (
-            <img alt="Play Button" src={Play} className="" />
+        <button
+          for="slider"
+          className="mx-1"
+          onClick={paused ? play : pause}
+          disabled={buffering}
+        >
+          {paused ? (
+            <img
+              alt="Play Button"
+              src={Play}
+              className={buffering ? "animate-pulse cursor-not-allowed" : ""}
+            />
           ) : (
-            <img alt="Pause Button" src={Pause} />
+            <img
+              alt="Pause Button"
+              src={Pause}
+              className={buffering ? "animate-pulse cursor-not-allowed" : ""}
+            />
           )}
         </button>
-        <button onClick={() => (audioRef.current.currentTime += 15)}>
-          <img alt="Skip Forward" src={SkipForward} />
+        <button
+          onClick={() => (audioRef.current.currentTime += 15)}
+          disabled={buffering}
+        >
+          <img
+            alt="Skip Forward"
+            src={SkipForward}
+            className={buffering ? "cursor-not-allowed" : ""}
+          />
         </button>
       </div>
       <div className="flex w-full items-center justify-center flex-wrap">

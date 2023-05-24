@@ -9,14 +9,14 @@ import Loading from "../components/Loading";
 
 const Song = () => {
   const audioRef = useRef(null);
+  const navigate = useNavigate();
+  const { uuid } = useParams();
   const [activeIndex, setActiveIndex] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(25);
   const [duration, setDuration] = useState(0);
   const [lyrics, setLyrics] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
-  const { uuid } = useParams();
   const [track_name, setTrack] = useState("");
   const [artist_name, setArtist] = useState("");
 
