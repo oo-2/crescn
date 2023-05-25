@@ -3,8 +3,8 @@ import React from "react";
 const Loading = () => {
   return (
   
-      <div class="loader">
-        <div class="loader-inner">
+      <div className="loader">
+        <div className="loader-inner">
           {[...Array(6)].map((_, index) => (
             <div
               key={index}

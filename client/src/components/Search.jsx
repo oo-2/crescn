@@ -31,10 +31,10 @@ const Search = ({ label, undertext }) => {
   };
 
   return (
-    <div class="w-full md:w-2/3 flex flex-col items-center text-center">
-      <form onSubmit={searchQuery} class="flex w-full justify-center items-end">
-        <div class="relative mr-4 lg:w-full xl:w-1/2 w-2/4 md:w-full text-left">
-          <label for="search" class="leading-7 text-sm text-gray-400">
+    <div className="w-full md:w-2/3 flex flex-col items-center text-center">
+      <form onSubmit={searchQuery} className="flex w-full justify-center items-end">
+        <div className="relative mr-4 lg:w-full xl:w-1/2 w-2/4 md:w-full text-left">
+          <label for="search" className="leading-7 text-sm text-gray-400">
             {label}
           </label>
           <input
@@ -42,7 +42,7 @@ const Search = ({ label, undertext }) => {
             name="search-input"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            class="w-full bg-slate-800 rounded
+            className="w-full bg-slate-800 rounded
           focus:ring-2  focus:ring-purple-700 focus:bg-opacity-50
           hover:ring-1  hover:ring-purple-500 hover:bg-opacity-80
           text-base outline-none text-gray-100 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
@@ -50,22 +50,22 @@ const Search = ({ label, undertext }) => {
         </div>
         <button
           type="submit"
-          class="text-white bg-purple-700 hover:bg-purple-800 py-2 px-6 rounded text-lg"
+          className="text-white bg-purple-700 hover:bg-purple-800 py-2 px-6 rounded text-lg"
         >
           Search
         </button>
       </form>
-      <p class="sm:text-sm mt-2  text-gray-200">{undertext}</p>
-      {error && <p class="text-red-700">{error}</p>}
+      <p className="sm:text-sm mt-2  text-gray-200">{undertext}</p>
+      {error && <p className="text-red-700">{error}</p>}
 
       {showResults && (
-        <div class="w-full focus:ring-2 mt-3 drop-shadow">
-          <ul class="divide-y divide-gray-500 bg-gray-800 rounded bg-opacity-40 border-gray-700 ">
+        <div className="w-full focus:ring-2 mt-3 drop-shadow">
+          <ul className="divide-y divide-gray-500 bg-gray-800 rounded bg-opacity-40 border-gray-700 ">
             {results.length > 0 ? (
               results.map((result) => (
                 <li
                   key={result.track_id}
-                  class="hover:bg-purple-900 hover:text-gray-100 rounded text-gray-300 py-1 px-3 leading-7 transition-colors ease-in-out"
+                  className="hover:bg-purple-900 hover:text-gray-100 rounded text-gray-300 py-1 px-3 leading-7 transition-colors ease-in-out"
                 >
                   <Link
                     to={`/song/${result._id}`}
@@ -78,7 +78,7 @@ const Search = ({ label, undertext }) => {
                 </li>
               ))
             ) : (
-              <p class="text-base text-gray-100 py-1 px-3">No results found</p>
+              <p className="text-base text-gray-100 py-1 px-3">No results found</p>
             )}
           </ul>
         </div>

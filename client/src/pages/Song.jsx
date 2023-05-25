@@ -15,15 +15,15 @@ const Song = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(25);
   const [duration, setDuration] = useState(0);
-  const [lyrics, setLyrics] = useState("");
+  const [lyrics, setLyrics] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchedAPI, setFetchedAPI] = useState(false);
   const [track_name, setTrack] = useState("");
   const [artist_name, setArtist] = useState("");
+  const [track_id, setTrackID] = useState(null);
 
   useEffect(() => {
     const fetchSong = async () => {
-      var track_id = null;
-
       await fetch(`http://localhost:3001/api/song/${uuid}`)
         .then((res) => res.json())
         .catch((error) => {
@@ -35,30 +35,30 @@ const Song = () => {
             setTrack(data.track_name);
             setDuration(data.duration / 1000);
             if (!data.lyrics.length) {
-              track_id = data.track_id;
+              setTrackID(data.track_id);
             } else {
               setLyrics(data.lyrics);
             }
+            setFetchedAPI(true);
           } else {
             navigate("localhost:3000/404");
           }
         });
-
       if (track_id)
         await fetch(`http://localhost:3001/api/lyrics/${track_id}`)
           .then((res) => res.json())
           .catch((error) => {
             console.error("Error:", error);
-            setLyrics([]);
           })
           .then((data) => {
             if (data) setLyrics(data);
-            else setLyrics([]);
+            setIsLoading(false);
           });
-      setIsLoading(false);
+        else setIsLoading(false);
+      
     };
     fetchSong();
-  }, [navigate, uuid]);
+  }, [navigate, track_id, uuid]);
 
   function handleTimeUpdate() {
     if (!audioRef.current) return;
@@ -74,44 +74,48 @@ const Song = () => {
 
   return (
     <div>
-      <div class="container mx-auto flex flex-col justify-center items-center px-5 py-36 ">
-        <img
-          class="lg:w-2/6 md:w-3/6 w-5/6 pb-10 object-center rounded"
-          alt="Crescn Logo"
-          src={Logo}
-        />
-        {isLoading ? (
-          <div class="flex w-full justify-center items-center bg-gray-800 rounded h-screen">
-            <Loading />
-          </div>
-        ) : (
-          <>
-            <Lyrics
-              audioRef={audioRef}
-              lyrics={lyrics}
-              activeIndex={activeIndex}
-            />
-            <div class="w-full md:w-2/3 flex flex-col items-center text-center">
-              <MusicPlayer
-                track_name={track_name}
-                artist_name={artist_name}
-                audioRef={audioRef}
-                currentTime={currentTime}
-                setCurrentTime={setCurrentTime}
-                duration={duration}
-                setDuration={setDuration}
-                handleTimeUpdate={handleTimeUpdate}
-                volume={volume}
-                setVolume={setVolume}
-              />
+      {fetchedAPI ? (
+        <div className="container mx-auto flex flex-col justify-center items-center px-5 py-36 ">
+          <img
+            className="lg:w-2/6 md:w-3/6 w-5/6 pb-10 object-center rounded"
+            alt="Crescn Logo"
+            src={Logo}
+          />
+          {isLoading ? (
+            <div className="flex w-full justify-center items-center bg-gray-800 rounded h-screen">
+              <Loading />
             </div>
-          </>
-        )}
-
-        <Footer />
-      </div>
+          ) : (
+            <>
+              <Lyrics
+                audioRef={audioRef}
+                lyrics={lyrics}
+                activeIndex={activeIndex}
+              />
+              <div className="w-full md:w-2/3 flex flex-col items-center text-center">
+                <MusicPlayer
+                  track_name={track_name}
+                  artist_name={artist_name}
+                  audioRef={audioRef}
+                  currentTime={currentTime}
+                  setCurrentTime={setCurrentTime}
+                  duration={duration}
+                  setDuration={setDuration}
+                  handleTimeUpdate={handleTimeUpdate}
+                  volume={volume}
+                  setVolume={setVolume}
+                />
+              </div>
+            </>
+          )}
+  
+          <Footer />
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
-  );
+  );  
 };
 
 export default Song;
