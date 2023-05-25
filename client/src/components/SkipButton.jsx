@@ -15,7 +15,7 @@ const SkipButton = ({ seconds, buffering, audioRef }) => {
   return (
     <button onClick={() => skip(seconds)} disabled={buffering}>
       <img
-        alt={seconds < 0 ? "Skip Backward" : "Skip Forward"}
+        alt={seconds < 0 ? "Skip Backward 15 Seconds" : "Skip Forward 15 Seconds"}
         src={seconds < 0 ? SkipBackward : SkipForward}
         className={buffering ? "cursor-not-allowed" : buttonStyle()}
       />

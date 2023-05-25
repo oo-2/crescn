@@ -5,7 +5,7 @@ import Cat from "../icons/Cat.svg";
 const NotFound = () => {
   return (
     <section className="min-h-screen flex flex-col">
-      <div className="container m-auto flex flex-col py-5 justify-center items-center ">
+      <div className="container m-auto flex flex-col py-12 justify-center items-center ">
         <img
           className="lg:w-2/6 md:w-3/6 w-5/6 mb-2 object-cover object-center rounded"
           alt="Crescn Logo"
