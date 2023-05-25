@@ -18,12 +18,14 @@ const PlayPauseButton = ({ paused, setPaused, buffering, audioRef }) => {
   useEffect(() => {
     console.log(paused);
     const handleKeydown = (event) => {
-      event.preventDefault();
-      if (!buffering && event.code === "Space") {
-        if (paused) {
-          play();
-        } else {
-          pause();
+      if (event.code === "Space") {
+        event.preventDefault();
+        if (!buffering) {
+          if (paused) {
+            play();
+          } else {
+            pause();
+          }
         }
       }
     };
@@ -42,7 +44,9 @@ const PlayPauseButton = ({ paused, setPaused, buffering, audioRef }) => {
       <img
         alt={paused ? "Play Button" : "Pause Button"}
         src={paused ? Play : Pause}
-        className={buffering ? "animate-pulse cursor-not-allowed" : "hover:opacity-50"}
+        className={
+          buffering ? "animate-pulse cursor-not-allowed" : "hover:opacity-50"
+        }
       />
     </button>
   );

@@ -12,8 +12,6 @@ const Footer = () => {
         </a>
         <p className="text-sm sm:ml-4 sm:pl-4 sm:border-l sm:border-gray-100 sm:py-2">
           &copy; 2023
-        </p>
-        <span className="m-auto py-2 opacity-80 sm:m-0 sm:p-0">
           <a
             href="/terms"
             target="_blank"
@@ -29,8 +27,9 @@ const Footer = () => {
             className="hover:opacity-75 mx-2"
           >
             Privacy
-          </a>
-        </span>
+            </a>
+        </p>
+
         <span className="inline-flex sm:ml-auto">
           <a href="https://github.com/oo-2" target="_blank" rel="noreferrer">
             <img alt="Github Profile" src={Github} />

@@ -38,6 +38,7 @@ const Song = () => {
               setTrackID(data.track_id);
             } else {
               setLyrics(data.lyrics);
+              setIsLoading(false);
             }
             setFetchedAPI(true);
           } else {
@@ -54,7 +55,7 @@ const Song = () => {
             if (data) setLyrics(data);
             setIsLoading(false);
           });
-        else setIsLoading(false);
+       
       
     };
     fetchSong();

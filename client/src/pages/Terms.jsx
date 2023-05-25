@@ -18,7 +18,7 @@ const Terms = () => {
           <div className="bg-gray-700 p-4 text-lg leading-relaxed">
             <ol className="list-none">
               <p className="font-semibold m-4">
-                These Terms and Conditions govern your use of www.Crescn.app
+                These Terms and Conditions govern your use of www.crescn.app
                 ("Website") operated by the website's owners (collectively referred
                 to as "we", "us", or "our"). By accessing and using the Website,
                 you agree to be bound by these Terms and Conditions and our
