@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import Logo from "../icons/Logo.svg";
+import Logo from "../components/Logo";
 import MusicPlayer from "../components/MusicPlayer";
 import Lyrics from "../components/Lyrics";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
+
+
 
 const Song = () => {
   const audioRef = useRef(null);
@@ -24,7 +26,7 @@ const Song = () => {
 
   useEffect(() => {
     const fetchSong = async () => {
-      await fetch(`http://localhost:3001/api/song/${uuid}`)
+      await fetch(`${process.env.REACT_APP_API_URL}/api/song/${uuid}`)
         .then((res) => res.json())
         .catch((error) => {
           console.error("Error:", error);
@@ -42,11 +44,11 @@ const Song = () => {
             }
             setFetchedAPI(true);
           } else {
-            navigate("localhost:3000/404");
+            navigate("/404");
           }
         });
       if (track_id)
-        await fetch(`http://localhost:3001/api/lyrics/${track_id}`)
+        await fetch(`${process.env.REACT_APP_API_URL}/api/lyrics/${track_id}`)
           .then((res) => res.json())
           .catch((error) => {
             console.error("Error:", error);
@@ -75,13 +77,11 @@ const Song = () => {
 
   return (
     <div>
+      <title>{process.env.REACT_APP_WEBSITE_NAME}</title>
       {fetchedAPI ? (
-        <div className="container mx-auto flex flex-col justify-center items-center px-5 py-36 ">
-          <img
-            className="lg:w-2/6 md:w-3/6 w-5/6 pb-10 object-center rounded"
-            alt="Crescn Logo"
-            src={Logo}
-          />
+        <div className="container mx-auto flex flex-col justify-center items-center pt-5 pb-36">
+          <title> {track_name} by {artist_name} | Crescn</title>
+          <Logo />
           {isLoading ? (
             <div className="flex w-full justify-center items-center bg-gray-800 rounded h-screen">
               <Loading />

@@ -1,15 +1,12 @@
 import React from "react";
-import Logo from "../icons/Logo.svg";
+import Logo from "../components/Logo";
 import Footer from "../components/Footer";
 
 const Terms = () => {
   return (
-    <div className="container mx-auto flex flex-col justify-center items-center">
-      <img
-        className="lg:w-2/6 md:w-3/6 w-5/6 mb-2 py-12 object-cover object-center rounded"
-        alt="Crescn Logo"
-        src={Logo}
-      />
+    <div className="container mx-auto flex flex-col justify-center items-center pt-5">
+      <title>Terms and Conditions | {process.env.REACT_APP_WEBSITE_NAME}</title>
+      <Logo />
 
       <div className="text-white bg-gray-800 rounded w-full ">
         <div className="container mx-auto p-4 max-w-screen-xl">

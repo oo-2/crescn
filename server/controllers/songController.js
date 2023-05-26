@@ -1,5 +1,5 @@
 var request = require("request");
-const config = require("config");
+require("dotenv").config();
 const Song = require("../models/songModel");
 
 const { v5: uuidv5 } = require("uuid");
@@ -7,8 +7,8 @@ const { v5: uuidv5 } = require("uuid");
 const namespace = "7d6d75f5-73e9-42d0-8cfe-74b7a9c19181";
 
 const searchSong = async (req, res) => {
-  var client_id = config.get("Spotify.client_id");
-  var client_secret = config.get("Spotify.client_secret");
+  var client_id = process.env.SPOTIFY_ID;
+  var client_secret = process.env.SPOTIFY_SECRET;
 
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",

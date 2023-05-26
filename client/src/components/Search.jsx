@@ -12,13 +12,14 @@ const Search = ({ label, undertext }) => {
     if (query.trim() !== "") {
       try {
         await fetch(
-          `http://localhost:3001/api/song/search/${encodeURIComponent(query)}`
+          `${process.env.REACT_APP_API_URL}/api/song/search/${encodeURIComponent(query)}`
         )
           .then((res) => res.json())
           .then((data) => setResults(data));
         setError(null);
         setShowResults(true);
       } catch (error) {
+        console.log(error);
         setError("An error occurred while searching. Please try again later.");
         setResults([]);
         setShowResults(false);
@@ -32,7 +33,10 @@ const Search = ({ label, undertext }) => {
 
   return (
     <div className="w-full md:w-2/3 flex flex-col items-center text-center">
-      <form onSubmit={searchQuery} className="flex w-full justify-center items-end">
+      <form
+        onSubmit={searchQuery}
+        className="flex w-full justify-center items-end"
+      >
         <div className="relative mr-4 lg:w-full xl:w-1/2 w-2/4 md:w-full text-left">
           <label for="search" className="leading-7 text-sm text-gray-400">
             {label}
@@ -67,10 +71,7 @@ const Search = ({ label, undertext }) => {
                   key={result.track_id}
                   className="hover:bg-purple-900 hover:text-gray-100 rounded text-gray-300 py-1 px-3 leading-7 transition-colors ease-in-out"
                 >
-                  <Link
-                    to={`/song/${result._id}`}
-                    
-                  >
+                  <Link to={`/song/${result._id}`}>
                     <h3>
                       {result.artist_name} - {result.track_name}
                     </h3>
@@ -78,7 +79,9 @@ const Search = ({ label, undertext }) => {
                 </li>
               ))
             ) : (
-              <p className="text-base text-gray-100 py-1 px-3">No results found</p>
+              <p className="text-base text-gray-100 py-1 px-3">
+                No results found
+              </p>
             )}
           </ul>
         </div>

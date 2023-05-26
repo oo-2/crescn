@@ -57,7 +57,7 @@ const MusicPlayer = ({
       </div>
       <audio
         ref={audioRef}
-        src={`http://localhost:3001/api/audio/${encodeURIComponent(
+        src={`${process.env.REACT_APP_API_URL}/api/audio/${encodeURIComponent(
           `${track_name} - ${artist_name}`
         )}`}
         onTimeUpdate={handleTimeUpdate}
