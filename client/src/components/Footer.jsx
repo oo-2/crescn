@@ -12,7 +12,7 @@ const Footer = () => {
         </a>
         <p className="text-sm sm:ml-4 sm:pl-4 sm:border-l sm:border-gray-100 sm:py-2">
           &copy; 2023
-          <a
+          {/* <a
             href="/terms"
             target="_blank"
             rel="noreferrer"
@@ -27,7 +27,7 @@ const Footer = () => {
             className="hover:opacity-75 mx-2"
           >
             Privacy
-          </a>
+          </a> */}
         </p>
 
         <span className="inline-flex sm:ml-auto">
