@@ -24,7 +24,7 @@ const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
         <ul className=" bg-gray-800 rounded" ref={lyricsRef}>
           {lyrics.map((lyric, index) => (
             <li
-              key={lyric.startTimeMs}
+              key={index}
               onClick={() =>
                 handleLyricClick(lyric.startTimeMs, lyric.endTimeMs)
               }

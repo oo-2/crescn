@@ -7,8 +7,6 @@ import Lyrics from "../components/Lyrics";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
 
-
-
 const Song = () => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
@@ -44,7 +42,12 @@ const Song = () => {
             }
             setFetchedAPI(true);
           } else {
-            navigate("/404");
+            navigate("/error", {
+              state: {
+                error: "Song not found",
+                message: "Sorry about that, choose a different one.",
+              },
+            });
           }
         });
       if (track_id)
@@ -57,8 +60,6 @@ const Song = () => {
             if (data) setLyrics(data);
             setIsLoading(false);
           });
-       
-      
     };
     fetchSong();
   }, [navigate, track_id, uuid]);
@@ -77,10 +78,12 @@ const Song = () => {
 
   return (
     <div>
-      <title>{process.env.REACT_APP_WEBSITE_NAME}</title>
       {fetchedAPI ? (
         <div className="container mx-auto flex flex-col justify-center items-center pt-5 pb-36">
-          <title> {track_name} by {artist_name} | Crescn</title>
+          <title>
+            {" "}
+            {track_name} by {artist_name} | {process.env.REACT_APP_WEBSITE_NAME}
+          </title>
           <Logo />
           {isLoading ? (
             <div className="flex w-full justify-center items-center bg-gray-800 rounded h-screen">
@@ -109,14 +112,14 @@ const Song = () => {
               </div>
             </>
           )}
-  
+
           <Footer />
         </div>
       ) : (
-        <></>
+        <title>{process.env.REACT_APP_WEBSITE_NAME}</title>
       )}
     </div>
-  );  
+  );
 };
 
 export default Song;

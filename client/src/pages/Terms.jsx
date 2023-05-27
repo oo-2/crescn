@@ -11,15 +11,18 @@ const Terms = () => {
       <div className="text-white bg-gray-800 rounded w-full ">
         <div className="container mx-auto p-4 max-w-screen-xl">
           <h1 className="text-3xl font-bold mb-1">Terms and Conditions</h1>
-          <p className="font-light text-md m-2">Last updated: May 25th, 2023</p>
+          <p className="font-light text-md m-2">
+            Last updated: {process.env.REACT_APP_TERMS_DATE}
+          </p>
           <div className="bg-gray-700 p-4 text-lg leading-relaxed">
             <ol className="list-none">
               <p className="font-semibold m-4">
-                These Terms and Conditions govern your use of www.crescn.app
-                ("Website") operated by the website's owners (collectively referred
-                to as "we", "us", or "our"). By accessing and using the Website,
-                you agree to be bound by these Terms and Conditions and our
-                Privacy Policy (found{" "}
+                These Terms and Conditions govern your use of{" "}
+                {process.env.REACT_APP_BASE_URL} ("Website") operated by the
+                website's owners (collectively referred to as "we", "us", or
+                "our"). By accessing and using the Website, you agree to be
+                bound by these Terms and Conditions and our Privacy Policy
+                (found{" "}
                 <a
                   href="/privacy"
                   target="_blank"
@@ -126,10 +129,10 @@ const Terms = () => {
               <p className="m-4">
                 To submit a DMCA notification, please send an email to{" "}
                 <a
-                  href="mailto:dmca@crescn.app"
+                  href={`mailto:${process.env.REACT_APP_DMCA_EMAIL}`}
                   className="underline text-blue-300 hover:opacity-75"
                 >
-                  contact@crescn.app
+                  {process.env.REACT_APP_DMCA_EMAIL}
                 </a>{" "}
                 with the required information mentioned above.
               </p>
@@ -185,10 +188,10 @@ const Terms = () => {
                 <a href="#termination">Termination</a>
               </li>
               <p className="m-4">
-                The website's owners reserve the right to terminate or
-                suspend your access to the Website immediately, without prior
-                notice or liability, for any reason whatsoever, including
-                without limitation if you breach these Terms and Conditions.
+                The website's owners reserve the right to terminate or suspend
+                your access to the Website immediately, without prior notice or
+                liability, for any reason whatsoever, including without
+                limitation if you breach these Terms and Conditions.
               </p>
               <p className="m-4">
                 Upon termination, your right to use the Website will immediately
@@ -242,10 +245,10 @@ const Terms = () => {
                 If you have any questions, concerns, or inquiries regarding
                 these Terms and Conditions, you may contact us at{" "}
                 <a
-                  href="mailto:contact@crescn.app"
+                  href={`mailto:${process.env.REACT_APP_TERMS_EMAIL}`}
                   className="underline text-blue-300 hover:opacity-75"
                 >
-                  contact@crescn.app
+                  {process.env.REACT_APP_TERMS_EMAIL}
                 </a>
                 .
               </p>

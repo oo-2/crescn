@@ -40,7 +40,7 @@ const searchSong = async (req, res) => {
           res.status(404).json({ error: "Lyrics not found" });
         } else {
           var results = body.tracks.items;
-          results = results.slice(0, 15);
+          results = results.slice(0, 10);
           const uniqueSongs = new Map();
 
           results.forEach((item) => {

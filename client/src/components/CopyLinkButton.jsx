@@ -9,6 +9,7 @@ const CopyLink = () => {
   const handleShareClick = () => {
     navigator.clipboard.writeText(window.location.href).catch((error) => {
       console.error("Failed to copy URL to clipboard:", error);
+      alert("Could not copy to clipboard.")
       return;
     });
     setIsClicked(true);

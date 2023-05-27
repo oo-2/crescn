@@ -16,7 +16,6 @@ const PlayPauseButton = ({ paused, setPaused, buffering, audioRef }) => {
   }, [setPaused, audioRef]);
 
   useEffect(() => {
-    console.log(paused);
     const handleKeydown = (event) => {
       if (event.code === "Space") {
         event.preventDefault();

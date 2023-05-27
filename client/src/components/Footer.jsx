@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="text-white text-opacity-90 body-font mt-auto w-full flex-shrink">
       <div className="px-5 py-3 w-full flex sm:flex-row flex-col items-center">
         <a href="/" rel="noreferrer">
-          <img alt="Crescn Logo" src={Logo} />
+          <img alt={`${process.env.REACT_APP_WEBSITE_NAME} Logo`} src={Logo} />
         </a>
         <p className="text-sm sm:ml-4 sm:pl-4 sm:border-l sm:border-gray-100 sm:py-2">
           &copy; 2023
@@ -27,7 +27,7 @@ const Footer = () => {
             className="hover:opacity-75 mx-2"
           >
             Privacy
-            </a>
+          </a>
         </p>
 
         <span className="inline-flex sm:ml-auto">

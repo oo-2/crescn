@@ -4,6 +4,7 @@ import PlayPauseButton from "./PlayPauseButton";
 import SeekBarSlider from "./SeekBarSlider";
 import VolumeSlider from "./VolumeSlider";
 import CopyLink from "./CopyLinkButton";
+import { useNavigate } from "react-router-dom";
 
 const MusicPlayer = ({
   track_name,
@@ -19,30 +20,29 @@ const MusicPlayer = ({
 }) => {
   const [buffering, setBuffering] = useState(false);
   const [paused, setPaused] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!audioRef.current) return;
-    const audioElement = audioRef.current;
     const storedVolume = localStorage.getItem("volume");
     if (storedVolume) {
       setVolume(parseFloat(storedVolume));
       audioRef.current.volume = storedVolume / 100;
     }
-
-    audioElement.addEventListener("loadstart", () => setBuffering(true));
-    audioElement.addEventListener("seeking", () => setBuffering(true));
-    audioElement.addEventListener("canplay", () => setBuffering(false));
-    audioElement.addEventListener("ended", () => setPaused(true));
-    return () => {
-      audioElement.removeEventListener("loadstart", () => setBuffering(true));
-      audioElement.removeEventListener("seeking", () => setBuffering(true));
-      audioElement.removeEventListener("canplay", () => setBuffering(false));
-      audioElement.addEventListener("ended", () => setPaused(true));
-    };
-  }, [setVolume, audioRef, buffering]);
+  }, [setVolume, audioRef]);
 
   const handleLoadedMetadata = (e) => {
     setDuration(e.target.duration);
+  };
+
+  const handleAudioError = () => {
+    console.error("Audio stream could not be retrieved");
+    navigate("/error", {
+      state: {
+        error: "Audio stream failed",
+        message: "Sorry about that, please try again later.",
+      },
+    });
   };
 
   return (
@@ -61,6 +61,11 @@ const MusicPlayer = ({
           `${track_name} - ${artist_name}`
         )}`}
         onTimeUpdate={handleTimeUpdate}
+        onError={handleAudioError}
+        onLoadStart={() => setBuffering(true)}
+        onSeeking={() => setBuffering(true)}
+        onCanPlay={() => setBuffering(false)}
+        onEnded={() => setPaused(true)}
         onLoadedMetadata={handleLoadedMetadata}
       ></audio>
       <div className="m-1 flex justify-center align-middle">

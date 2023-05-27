@@ -3,9 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Song from "./pages/Song";
-import Terms from "./pages/Terms"
+import Terms from "./pages/Terms";
 import Error from "./pages/Error";
-import PrivacyPolicy from "./pages/PrivacyPolicy"
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function App() {
   return (
@@ -14,7 +14,19 @@ function App() {
         <Route exact path="/" element={<Home />} />
         <Route exact path="/song/:uuid" element={<Song />} />
         <Route path="/terms" element={<Terms />} />
-        <Route path="/404" element={<Error errorNumber={404} errorMessage={"Page not found."} />} />
+        <Route
+          path="/404"
+          element={
+            <Navigate
+              to="/error"
+              state={{
+                error: 404,
+                message: "Page not found.",
+              }}
+            />
+          }
+        />
+        <Route path="/error" element={<Error />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>

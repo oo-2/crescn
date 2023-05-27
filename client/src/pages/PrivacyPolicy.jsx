@@ -11,11 +11,11 @@ const PrivacyPolicy = () => {
       <div className="text-white bg-gray-800 rounded w-full ">
         <div className="container mx-auto p-4 max-w-screen-xl">
           <h1 className="text-3xl font-bold mb-1">Privacy Policy</h1>
-          <p className="font-light text-md m-2">Last updated: May 25th, 2023</p>
+          <p className="font-light text-md m-2">Last updated: {process.env.REACT_APP_PRIVACY_DATE}</p>
           <div className="bg-gray-700 p-4 text-lg leading-relaxed">
             <ol className="list-none">
               <p className="m-4 font-semibold">
-                This privacy policy indicates how www.crescn.app ("Website")
+                This privacy policy indicates how {process.env.REACT_APP_BASE_URL} ("Website")
                 operated by the website's owners (collectively referred to as
                 "we", "us", or "our") uses data retrieved from the Website.
               </p>
@@ -149,6 +149,23 @@ const PrivacyPolicy = () => {
               </p>
               <p className="m-4">We do not use third-party cookies.</p>
               <li
+                id="contact"
+                className="text-xl font-semibold m-4 ml-6 hover:opacity-75"
+              >
+                <a href="#contact">Contact Us</a>
+              </li>
+              <p className="m-4">
+                If you have any questions, concerns, or inquiries regarding
+                these Terms and Conditions, you may contact us at{" "}
+                <a
+                  href={`mailto:${process.env.REACT_APP_PRIVACY_EMAIL}`}
+                  className="underline text-blue-300 hover:opacity-75"
+                >
+                  {process.env.REACT_APP_PRIVACY_EMAIL}
+                </a>
+                .
+              </p>
+              <li
                 id="changes-to-this-privacy-policy"
                 className="text-xl font-semibold m-4 ml-6 hover:opacity-75"
               >
@@ -163,7 +180,7 @@ const PrivacyPolicy = () => {
                 periodically to stay informed about our privacy practices.
               </p>
               <p className="font-semibold">
-                By continuing to use Crescn, you confirm that you have read,
+                By continuing to use {process.env.REACT_APP_WEBSITE_NAME}, you confirm that you have read,
                 understood, and agreed to the privacy policy.
               </p>
             </ol>
