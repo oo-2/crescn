@@ -9,7 +9,7 @@ connectDB();
 
 app.use(
   cors({
-    origin: "https://www.crescn.app",
+    origin: "https://crescn.app",
   })
 );
 app.use("/api", require("./routes/lyricsRoutes"));
