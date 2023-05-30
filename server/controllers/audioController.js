@@ -21,6 +21,7 @@ const getAudio = async (req, res) => {
     });
     res.set({
       "Content-Type": "audio/mp3",
+      "Connection": "keep-alive",
       "Content-Length": meta.contentLength,
       "Accept-Ranges": `bytes 0-${meta.contentLength}`,
     });
