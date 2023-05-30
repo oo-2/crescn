@@ -12,7 +12,9 @@ const Search = ({ label, undertext }) => {
     if (query.trim() !== "") {
       try {
         await fetch(
-          `${process.env.REACT_APP_API_URL}/api/song/search/${encodeURIComponent(query)}`
+          `${
+            process.env.REACT_APP_API_URL
+          }/api/song/search/${encodeURIComponent(query)}`
         )
           .then((res) => res.json())
           .then((data) => setResults(data));

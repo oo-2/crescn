@@ -2,7 +2,6 @@ const YoutubeMusicApi = require("youtube-music-api");
 const ytdl = require("ytdl-core");
 
 const getAudio = async (req, res) => {
-
   const music = new YoutubeMusicApi();
   var url = "";
   await music.initalize();

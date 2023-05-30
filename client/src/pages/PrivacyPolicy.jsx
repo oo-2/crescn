@@ -74,14 +74,14 @@ const PrivacyPolicy = () => {
                     Analyzing website usage and trends.
                     <ul className="list-disc ml-4">
                       <li>
-                        This is done using a self-hosted instance of{" "}
+                        This is done using {" "}
                         <a
-                          href="https://github.com/plausible/analytics"
+                          href="https://umami.is"
                           target="_blank"
                           rel="noreferrer"
                           className="underline text-blue-300 hover:opacity-75"
                         >
-                          Plausible Analytics
+                          Umami
                         </a>{" "}
                         for analytics data.
                       </li>
