@@ -19,21 +19,44 @@ const getAudio = async (req, res) => {
       format: "mp3",
       filter: "audioonly",
     });
-    res.set({
-      "Content-Type": "audio/mp3",
-      "Connection": "keep-alive",
-      "Content-Length": meta.contentLength,
-      "Accept-Ranges": `bytes 0-${meta.contentLength}`,
-    });
-    const stream = ytdl(url, {
-      format: "mp3",
-      filter: "audioonly",
-    }).pipe(res);
-
-    stream.on("error", (err) => {
-      console.error("Error occurred during streaming:", err);
-      res.status(500).send("An error occurred during streaming.");
-    });
+    
+    const range = req.headers.range;
+    const fileSize = meta.contentLength;
+    
+    if (range) {
+      const parts = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(parts[0]);
+      const end = parts[1] ? parseInt(parts[1]) : fileSize - 1;
+    
+      const chunkSize = end - start + 1;
+      const stream = ytdl(url, {
+        format: "mp3",
+        filter: "audioonly",
+      
+      });
+    
+      res.writeHead(206, {
+        "Content-Range": `bytes ${start}-${end}/${fileSize}`,
+        "Accept-Ranges": "bytes",
+        "Content-Length": chunkSize,
+        "Content-Type": "audio/mp3",
+      });
+    
+      stream.pipe(res);
+    } else {
+      res.set({
+        "Content-Type": "audio/mp3",
+        "Content-Length": fileSize,
+        "Accept-Ranges": "bytes",
+      });
+    
+      const stream = ytdl(url, {
+        format: "mp3",
+        filter: "audioonly",
+      });
+    
+      stream.pipe(res);
+    }
   } catch (err) {
     console.error("Error occurred while getting video info:", err);
     res.status(500).send("An error occurred while getting video info.");
