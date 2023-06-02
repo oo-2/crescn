@@ -1,15 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
+import { isIE, isSafari, isMobileSafari } from 'react-device-detect';
 import Logo from "../components/Logo";
 import MusicPlayer from "../components/MusicPlayer";
 import Lyrics from "../components/Lyrics";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
-const isSupported = () => {
-  const ua = navigator.userAgent.toLowerCase();
-  return ua.indexOf("applewebkit") !== -1;
-};
+
 const Song = () => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
@@ -28,12 +25,12 @@ const Song = () => {
 
 
   useEffect(() => {
-    if (isSupported) {
+    if (isIE || isMobileSafari || isSafari) {
       navigate("/error", {
         state: {
           error: "Browser Not Supported",
           message:
-            "Sorry, certain browsers are not supported such as Safari and Apple webkit.",
+            "Sorry, certain browsers are not supported such as IE, Safari, and Apple webkit.",
         },
       });
     }

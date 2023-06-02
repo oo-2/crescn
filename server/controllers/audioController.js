@@ -19,7 +19,7 @@ const getAudio = async (req, res) => {
 
   try {
     let info = await ytdl.getInfo(id);
-    const meta = ytdl.chooseFormat(info.formats);
+    const meta = ytdl.chooseFormat(info.formats, options);
     res.set({
       "Content-Type": "audio/mp3",
       "Content-Length": meta.contentLength,
