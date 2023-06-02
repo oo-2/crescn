@@ -6,7 +6,10 @@ import MusicPlayer from "../components/MusicPlayer";
 import Lyrics from "../components/Lyrics";
 import Footer from "../components/Footer";
 import Loading from "../components/Loading";
-
+const isSupported = () => {
+  const ua = navigator.userAgent.toLowerCase();
+  return ua.indexOf("applewebkit") !== -1;
+};
 const Song = () => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
@@ -22,7 +25,18 @@ const Song = () => {
   const [artist_name, setArtist] = useState("");
   const [track_id, setTrackID] = useState(null);
 
+
+
   useEffect(() => {
+    if (isSupported) {
+      navigate("/error", {
+        state: {
+          error: "Browser Not Supported",
+          message:
+            "Sorry, certain browsers are not supported such as Safari and Apple webkit.",
+        },
+      });
+    }
     const fetchSong = async () => {
       await fetch(`${process.env.REACT_APP_API_URL}/api/song/${uuid}`)
         .then((res) => res.json())

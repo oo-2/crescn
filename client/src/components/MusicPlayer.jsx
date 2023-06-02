@@ -35,8 +35,8 @@ const MusicPlayer = ({
     setDuration(e.target.duration);
   };
 
-  const handleAudioError = () => {
-    console.error("Audio stream could not be retrieved");
+  const handleAudioError = (error) => {
+    console.error("Audio stream could not be retrieved:", error);
     navigate("/error", {
       state: {
         error: "Audio stream failed",
@@ -61,7 +61,7 @@ const MusicPlayer = ({
           `${track_name} - ${artist_name}`
         )}`}
         onTimeUpdate={handleTimeUpdate}
-        onError={handleAudioError}
+        onError={(error) => handleAudioError(error)}
         onLoadStart={() => setBuffering(true)}
         onSeeking={() => setBuffering(true)}
         onCanPlay={() => setBuffering(false)}
