@@ -30,7 +30,7 @@ const Song = () => {
         state: {
           error: "Browser Not Supported",
           message:
-            "Sorry, certain browsers are not supported such as IE, Safari, and Apple webkit.",
+            "Sorry, certain browsers are not supported such as IE, Safari, and Apple's WebKit.",
         },
       });
     }
