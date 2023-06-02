@@ -18,7 +18,7 @@
     "throttle": "^1.0.3",
     "uuid": "^9.0.0",
     "youtube-music-api": "^1.0.6",
-    "ytdl-core": "^4.9.1"
+    "ytdl-core": "^4.11.4"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
