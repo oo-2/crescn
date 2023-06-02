@@ -13,7 +13,8 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/song/:uuid" element={<Song />} />
-        {/* <Route path="/terms" element={<Terms />} /> */}
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route
           path="/404"
           element={
@@ -27,7 +28,7 @@ function App() {
           }
         />
         <Route path="/error" element={<Error />} />
-        {/* <Route path="/privacy" element={<PrivacyPolicy />} /> */}
+        
         <Route path="*" element={<Navigate to="/404" />} />
       </Routes>
     </BrowserRouter>
