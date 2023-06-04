@@ -57,9 +57,7 @@ const MusicPlayer = ({
       </div>
       <audio
         ref={audioRef}
-        src={`${process.env.REACT_APP_API_URL}/api/audio/${encodeURIComponent(
-          `${track_name} - ${artist_name}`
-        )}`}
+        src={`${process.env.REACT_APP_API_URL}/api/audio/${encodeURIComponent(artist_name)}/${encodeURIComponent(track_name)}/${encodeURIComponent(duration)}`}
         onTimeUpdate={handleTimeUpdate}
         onError={(error) => handleAudioError(error)}
         onLoadStart={() => setBuffering(true)}

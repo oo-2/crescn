@@ -19,9 +19,9 @@ const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
   }
 
   return (
-    <div className="text-white w-full text-center text-lg">
+    <div className="w-full text-center bg-gray-800">
       {lyrics.length > 0 ? (
-        <ul className=" bg-gray-800 rounded" ref={lyricsRef}>
+        <ul ref={lyricsRef}>
           {lyrics.map((lyric, index) => (
             <li
               key={index}
@@ -30,8 +30,8 @@ const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
               }
               className={
                 index === activeIndex
-                  ? `rounded text-gray-100 text-xl bg-purple-700 py-1 leading-7 transition-colors ease-in-out `
-                  : `hover:bg-purple-900 hover:text-gray-100 rounded text-gray-300 py-2 transition-colors ease-in-out `
+                  ? `text-white text-xl py-2 transition-colors ease-in-out duration-150 bg-purple-700`
+                  : `text-gray-100 text-lg py-2 text-opacity-80 transition-colors ease-linear duration-200 hover:bg-purple-900 hover:text-opacity-100`
               }
             >
               <p>{lyric.words}</p>
@@ -39,8 +39,8 @@ const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
           ))}
         </ul>
       ) : (
-        <div className="h-screen flex bg-gray-800">
-          <p className="m-auto text-2xl">No lyrics found</p>
+        <div className="h-screen flex">
+          <p className="m-auto text-white text-2xl">No lyrics found</p>
         </div>
       )}
     </div>

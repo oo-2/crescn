@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { isIE, isSafari, isMobileSafari } from 'react-device-detect';
+import { isIE, isSafari, isMobileSafari } from "react-device-detect";
+import { Helmet } from "react-helmet";
+
 import Logo from "../components/Logo";
 import MusicPlayer from "../components/MusicPlayer";
 import Lyrics from "../components/Lyrics";
@@ -21,8 +23,9 @@ const Song = () => {
   const [track_name, setTrack] = useState("");
   const [artist_name, setArtist] = useState("");
   const [track_id, setTrackID] = useState(null);
-
-
+  const title = `${process.env.REACT_APP_WEBSITE_NAME}`;
+  const description = "Come sing along on Crescn";
+  const imageUrl = "https://crescn.app/logo192.png";
 
   useEffect(() => {
     if (isIE || isMobileSafari || isSafari) {
@@ -88,7 +91,17 @@ const Song = () => {
   }
 
   return (
-    <div>
+    <>
+      <Helmet>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageUrl} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
+      </Helmet>
+
       {fetchedAPI ? (
         <div className="container mx-auto flex flex-col justify-center items-center pt-5 pb-36">
           <title>
@@ -127,9 +140,9 @@ const Song = () => {
           <Footer />
         </div>
       ) : (
-        <title>{process.env.REACT_APP_WEBSITE_NAME}</title>
+        <title>{title}</title>
       )}
-    </div>
+    </>
   );
 };
 

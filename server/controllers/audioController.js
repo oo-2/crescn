@@ -1,4 +1,5 @@
 const YoutubeMusicApi = require("youtube-music-api");
+const stringSimilarity = require("string-similarity");
 const ytdl = require("ytdl-core");
 
 const getAudio = async (req, res) => {
@@ -8,15 +9,59 @@ const getAudio = async (req, res) => {
     format: "mp3",
     filter: "audioonly",
   };
-  await music.initalize();
-  await music.search(req.params.query, "song").then((result) => {
-    if (Object.values(result.content).length < 1) {
-      res.status(404).json({ error: "Audio not found" });
-    }
-    var song = result.content[0];
-    id = song.videoId;
-  });
 
+  await music.initalize();
+  await music
+    .search(`${req.params.artist} ${req.params.track}`, "song")
+    .then((result) => {
+      if (Object.values(result.content).length < 1) {
+        res.status(404).json({ error: "Audio not found" });
+      } else {
+        var songs = result.content;
+
+        let bestMatch = songs[0];
+        let bestMatchScore = 0;
+        songs.forEach((song) => {
+          let matchScore = 0;
+          let songArtist = "";
+          if (song.artist.length) {
+            songArtist = song.artist[0].name;
+          } else {
+            songArtist = song.artist.name;
+          }
+          if (
+            songArtist &&
+            songArtist.toLowerCase() === req.params.artist.toLowerCase()
+          ) {
+            matchScore += 3;
+          }
+
+          let durationDifference = Math.abs(
+            song.duration - req.params.duration
+          );
+          matchScore += 1 / (durationDifference + 1);
+
+          // Calculate the similarity between the track title and the song name, bonus for exact
+          if (song.name.toLowerCase() === req.params.track.toLowerCase()) {
+            matchScore += 2;
+          }
+
+          let titleSimilarity = stringSimilarity.compareTwoStrings(
+            req.params.track.toLowerCase(),
+            song.name.toLowerCase()
+          );
+          matchScore += titleSimilarity;
+
+          // Update the best match if the current song has a higher score
+          if (matchScore > bestMatchScore) {
+            bestMatch = song;
+            bestMatchScore = matchScore;
+          }
+        });
+
+        id = bestMatch.videoId;
+      }
+    });
   try {
     let info = await ytdl.getInfo(id);
     const meta = ytdl.chooseFormat(info.formats, options);

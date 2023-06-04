@@ -1,23 +1,40 @@
 import React from "react";
+import { Helmet } from "react-helmet";
+
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
 
 const PrivacyPolicy = () => {
+  const title = `Privacy Policy | ${process.env.REACT_APP_WEBSITE_NAME}`;
+  const description = "Privacy Policy";
+  const imageUrl = "https://crescn.app/logo192.png";
   return (
     <div className="container mx-auto flex flex-col justify-center items-center pt-5">
-      <title>Privacy Policy | {process.env.REACT_APP_WEBSITE_NAME}</title>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageUrl} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
+      </Helmet>
       <Logo />
 
       <div className="text-white bg-gray-800 rounded w-full ">
         <div className="container mx-auto p-4 max-w-screen-xl">
           <h1 className="text-3xl font-bold mb-1">Privacy Policy</h1>
-          <p className="font-light text-md m-2">Last updated: {process.env.REACT_APP_PRIVACY_DATE}</p>
+          <p className="font-light text-md m-2">
+            Last updated: {process.env.REACT_APP_PRIVACY_DATE}
+          </p>
           <div className="bg-gray-700 p-4 text-lg leading-relaxed">
             <ol className="list-none">
               <p className="m-4 font-semibold">
-                This privacy policy indicates how {process.env.REACT_APP_BASE_URL} ("Website")
-                operated by the website's owners (collectively referred to as
-                "we", "us", or "our") uses data retrieved from the Website.
+                This privacy policy indicates how{" "}
+                {process.env.REACT_APP_BASE_URL} ("Website") operated by the
+                website's owners (collectively referred to as "we", "us", or
+                "our") uses data retrieved from the Website.
               </p>
               <p className="m-4 font-semibold">
                 The purpose of this privacy policy is to inform you how we
@@ -74,7 +91,7 @@ const PrivacyPolicy = () => {
                     Analyzing website usage and trends.
                     <ul className="list-disc ml-4">
                       <li>
-                        This is done using {" "}
+                        This is done using{" "}
                         <a
                           href="https://umami.is"
                           target="_blank"
@@ -180,8 +197,9 @@ const PrivacyPolicy = () => {
                 periodically to stay informed about our privacy practices.
               </p>
               <p className="font-semibold">
-                By continuing to use {process.env.REACT_APP_WEBSITE_NAME}, you confirm that you have read,
-                understood, and agreed to the privacy policy.
+                By continuing to use {process.env.REACT_APP_WEBSITE_NAME}, you
+                confirm that you have read, understood, and agreed to the
+                privacy policy.
               </p>
             </ol>
           </div>

@@ -1,11 +1,25 @@
 import React from "react";
+import { Helmet } from "react-helmet";
+
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
 
 const Terms = () => {
+  const title = `Terms and Conditions | ${process.env.REACT_APP_WEBSITE_NAME}`;
+  const description = "Terms and Conditions";
+  const imageUrl = "https://crescn.app/logo192.png";
   return (
     <div className="container mx-auto flex flex-col justify-center items-center pt-5">
-      <title>Terms and Conditions | {process.env.REACT_APP_WEBSITE_NAME}</title>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageUrl} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
+      </Helmet>
       <Logo />
 
       <div className="text-white bg-gray-800 rounded w-full ">

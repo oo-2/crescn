@@ -1,5 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet";
+
 import Logo from "../components/Logo";
 import Footer from "../components/Footer";
 import Cat from "../icons/Cat.svg";
@@ -11,11 +13,21 @@ const Error = () => {
     message: "We're not sure what happened but try again later.",
     contact: true,
   };
+  const title = `${error} | ${process.env.REACT_APP_WEBSITE_NAME}`;
+  const description = "Something went wrong";
+  const imageUrl = "https://crescn.app/logo192.png";
   return (
     <section className="min-h-screen flex flex-col">
-      <title>
-        {error} | {process.env.REACT_APP_WEBSITE_NAME}
-      </title>
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageUrl} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
+      </Helmet>
       <div className="container m-auto flex flex-col py-12 justify-center items-center ">
         <Logo />
       </div>
