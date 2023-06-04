@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { isIE, isSafari, isMobileSafari } from "react-device-detect";
 import { Helmet } from "react-helmet";
 
@@ -13,6 +13,11 @@ const Song = () => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
   const { uuid } = useParams();
+  const location = useLocation();
+  const { artistState, trackState } = location.state || {
+    artistState: "",
+    trackState: "",
+  };
   const [activeIndex, setActiveIndex] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(25);
@@ -91,8 +96,11 @@ const Song = () => {
   }
 
   return (
-    <>
+    <div>
       <Helmet>
+        <title>
+          {trackState} - {artistState} | {title}
+        </title>
         <meta name="description" content={description} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -106,7 +114,7 @@ const Song = () => {
         <div className="container mx-auto flex flex-col justify-center items-center pt-5 pb-36">
           <title>
             {" "}
-            {track_name} by {artist_name} | {process.env.REACT_APP_WEBSITE_NAME}
+            {track_name} - {artist_name} | {process.env.REACT_APP_WEBSITE_NAME}
           </title>
           <Logo />
           {isLoading ? (
@@ -140,9 +148,11 @@ const Song = () => {
           <Footer />
         </div>
       ) : (
-        <title>{title}</title>
+        <title>
+          {trackState} - {artistState} | {title}
+        </title>
       )}
-    </>
+    </div>
   );
 };
 

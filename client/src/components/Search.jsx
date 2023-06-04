@@ -71,7 +71,13 @@ const Search = ({ label, undertext }) => {
                   key={result.track_id}
                   className="text-gray-200 py-2 px-3 transition-colors ease-linear hover:bg-purple-900 hover:text-gray-100 "
                 >
-                  <Link to={`/song/${result._id}`}>
+                  <Link
+                    to={`/song/${result._id}`}
+                    state={{
+                      artistState: result.artist_name,
+                      trackState: result.track_name,
+                    }}
+                  >
                     <h3>
                       {result.artist_name} - {result.track_name}
                     </h3>
