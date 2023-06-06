@@ -24,6 +24,18 @@ Crescn is built using the MERN stack:
 - Customize the playback settings, such as volume and audio effects.
 - Responsive and intuitive user interface for seamless navigation.
 
+## Requirements for Setup
+
+To run this project locally, you will need the following:
+
+- [Node.js](https://nodejs.org/) (v14.x or above)
+- [npm](https://www.npmjs.com/) (Node package manager, usually comes with Node.js)
+- [MongoDB](https://www.mongodb.com/) (v4.x or above)
+
+Make sure you have the above requirements installed and properly set up on your development machine before proceeding with the project setup and execution.
+
+Additionally, please note that this project is not compatible with Internet Explorer and Safari browsers. It is recommended to use Google Chrome or Mozilla Firefox for the best experience.
+
 ## Setup Locally
 
 1. Clone the master branch and install the required dependencies
