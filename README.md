@@ -1,6 +1,6 @@
 
 <p align="center">
-  <img src="https://github.com/oo-2/crescn/blob/master/client/public/logo192.png" alt="Crescn Logo"/>
+  <a href="https://crescn.app" target="_blank" rel="noreferrer"> <img src="https://github.com/oo-2/crescn/blob/master/client/public/logo192.png" alt="Crescn Logo"/> </a>
 </p>
 
 # Crescn - Karaoke Web App
