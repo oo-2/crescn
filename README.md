@@ -47,7 +47,7 @@ cd ./server && npm install
 cd ../client && npm install
 ```
 2. Create a `.env` file in the client directory as well as server directory.
-#### The client directory uses the following variables:
+#### The server directory uses the following variables:
 ```
 PORT=3001
 MONGO_URI=
@@ -55,7 +55,27 @@ SPOTIFY_ID=(Spotify API ID)
 SPOTIFY_SECRET=(Spotify API Secret)
 SPOTIFY_DC=(Found in Spotify cookies as SP_DC)
 ```
-#### The server directory uses the following variables:
+**Obtaining SPOTIFY_ID and Spotify_SECRET**
+  You will need a spotify account and follow their API documentation, found [here](https://developer.spotify.com/documentation/web-api).
+  You need to get the client id and client secret from your Spotify application.
+**Obtaining SPOTIFY_DC**
+Chromium Browsers:
+    Have [spotify.com](https://open.spotify.com) open and be logged in
+    Open developer tools using F12 or the right-click context menu
+    Click **Application** in the header of the dev tools window
+    Under storage on the left-side navigation menu will be a section called "Cookies", expand this submenu
+    Select open.spotify.com to view the cookies
+    Search for sp_dc in the filter textarea and copy the value
+
+Firefox:
+    Have [spotify.com](https://open.spotify.com) open and be logged in
+    Open developer tools using F12 or the right-click context menu
+    Click **Storage** in the header of the dev tools window
+    Under storage on the left-side navigation menu will be a section called "Cookies", expand this submenu
+    Select open.spotify.com to view the cookies
+    Search for sp_dc in the filter items textarea and copy the value
+
+#### The client directory uses the following variables:
 ```
 REACT_APP_WEBSITE_NAME=Crescn
 REACT_APP_BASE_URL=localhost:3001
