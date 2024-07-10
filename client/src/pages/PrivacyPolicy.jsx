@@ -20,7 +20,15 @@ const PrivacyPolicy = () => {
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={imageUrl} />
       </Helmet>
-      <Logo />
+      <div className="container flex w-full  justify-center items-center">
+        <a
+          href="/"
+          rel="noreferrer"
+          className="flex lg:w-2/6 md:w-3/6 w-5/6  items-center"
+        >
+          <Logo className="mb-2 hover:opacity-90" />
+        </a>
+      </div>
 
       <div className="text-white bg-gray-800 rounded w-full ">
         <div className="container mx-auto p-4 max-w-screen-xl">

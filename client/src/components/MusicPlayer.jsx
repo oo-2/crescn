@@ -46,18 +46,18 @@ const MusicPlayer = ({
   };
 
   return (
-    <div className="bg-gray-800 text-white rounded-lg w-full fixed bottom-0 left-0 right-0">
-      <div className="bg-gray-600 py-2 rounded bg-opacity-80 flex justify-center">
-        <div className="flex flex-wrap">
-          <h2 className="pr-2">
-            {track_name} by {artist_name}
-          </h2>
-        </div>
-        <CopyLink />
+    <section className="w-full flex-col items-center bottom-0 left-0 right-0 bg-gray-800 text-gray-100 ">
+      <div className="bg-gray-600 py-2 bg-opacity-80 flex justify-center text-white rounded-tl-lg rounded-tr-lg ">
+        <h2 className="pr-2">
+          {track_name} by {artist_name}
+        </h2>
       </div>
+
       <audio
         ref={audioRef}
-        src={`${process.env.REACT_APP_API_URL}/api/audio/${encodeURIComponent(artist_name)}/${encodeURIComponent(track_name)}/${encodeURIComponent(duration)}`}
+        src={`${process.env.REACT_APP_API_URL}/api/audio/${encodeURIComponent(
+          artist_name
+        )}/${encodeURIComponent(track_name)}/${encodeURIComponent(duration)}`}
         onTimeUpdate={handleTimeUpdate}
         onError={(error) => handleAudioError(error)}
         onLoadStart={() => setBuffering(true)}
@@ -76,7 +76,7 @@ const MusicPlayer = ({
         />
         <SkipButton seconds={15} audioRef={audioRef} buffering={buffering} />
       </div>
-      <div className="flex w-full items-center justify-center flex-wrap">
+      <div className="w-full md:w-2/3 flex flex-row items-center text-center">
         <div className="container">
           <SeekBarSlider
             currentTime={currentTime}
@@ -85,7 +85,7 @@ const MusicPlayer = ({
             duration={duration}
           />
         </div>
-        <div className="md:right-0 md:absolute md:w-1/3 pl-9 flex flex-wrap">
+        <div className="">
           <VolumeSlider
             volume={volume}
             setVolume={setVolume}
@@ -93,7 +93,7 @@ const MusicPlayer = ({
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

@@ -2,6 +2,7 @@ var request = require("request");
 const Song = require("../models/songModel");
 require("dotenv").config();
 async function getLyrics(req, res) {
+ 
   var authOptions = {
     url: `https://open.spotify.com/`,
     headers: {
@@ -44,11 +45,13 @@ async function getLyrics(req, res) {
           });
           res.json(data);
         } else {
-          res.json([]);
+          res.json(response)
+          console.log(error)
+          
         }
       });
     } else {
-      res.json([]);
+      res.json(['hey']);
     }
   });
 }

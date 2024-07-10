@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../icons/Logo.svg";
+import Logo from "./Logo";
 import Github from "../icons/GitHub.svg";
 import Linkedin from "../icons/Linkedin.svg";
 
@@ -7,9 +7,11 @@ const Footer = () => {
   return (
     <footer className="text-white text-opacity-90 body-font mt-auto w-full flex-shrink">
       <div className="px-5 py-3 w-full flex sm:flex-row flex-col items-center">
-        <a href="/" rel="noreferrer">
-          <img alt={`${process.env.REACT_APP_WEBSITE_NAME} Logo`} src={Logo} />
+        <div className="w-24">
+        <a href="/" rel="noreferrer" className="">
+          <Logo className="mb-2 hover:opacity-90" />
         </a>
+        </div>
         <p className="text-sm sm:ml-4 sm:pl-4 sm:border-l sm:border-gray-100 sm:py-2">
           &copy; 2023
           <a

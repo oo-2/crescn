@@ -5,8 +5,8 @@
 body {
   background-color: #111827;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -56,5 +56,46 @@ body {
     transform: scale(1);
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
     opacity: 95%;
+  }
+}
+
+.marquee {
+  height: 50px;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee:hover p {
+width: max-content;
+overflow: initial;
+text-overflow: initial;
+white-space: initial;
+animation: scroll-left 2s linear forwards, back 4s 2s linear infinite;
+}
+
+.marquee p {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  line-height: 50px;
+  text-align: left;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+@keyframes back {
+from {
+      transform: translateX(100%);
+  }
+to {
+      transform: translateX(-100%);
+  }
+}
+@keyframes scroll-left {
+  to {
+      transform: translateX(-100%);
   }
 }
