@@ -1,24 +1,36 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { isIE, isSafari, isMobileSafari } from "react-device-detect";
+import { Helmet } from "react-helmet";
 
-import MusicPlayer from "./MusicPlayer";
-import Lyrics from "./Lyrics";
-import Loading from "./Loading";
-import Footer from "./Footer";
+import Logo from "../components/Logo";
+import MusicPlayer from "../components/MusicPlayer";
+import Lyrics from "../components/Lyrics";
+import Footer from "../components/Footer";
+import Loading from "../components/Loading";
 
-const ActiveSong = ({uuid, artist_name, track_name}) => {
+const Song = () => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
+  const { uuid } = useParams();
+  const location = useLocation();
+  const { artistState, trackState } = location.state || {
+    artistState: "",
+    trackState: "",
+  };
   const [activeIndex, setActiveIndex] = useState(null);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(25);
   const [duration, setDuration] = useState(0);
   const [lyrics, setLyrics] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [fetchedAPI, setFetchedAPI] = useState(false);
+  const [track_name, setTrack] = useState("");
+  const [artist_name, setArtist] = useState("");
   const [track_id, setTrackID] = useState(null);
-
+  const title = `${process.env.REACT_APP_WEBSITE_NAME}`;
+  const description = "Come sing along on Crescn";
+  const imageUrl = "https://crescn.app/logo192.png";
 
   useEffect(() => {
     if (isIE || isMobileSafari || isSafari) {
@@ -38,6 +50,8 @@ const ActiveSong = ({uuid, artist_name, track_name}) => {
         })
         .then((data) => {
           if (data && !data.error) {
+            setArtist(data.artist_name);
+            setTrack(data.track_name);
             setDuration(data.duration / 1000);
             if (!data.lyrics.length) {
               setTrackID(data.track_id);
@@ -45,6 +59,7 @@ const ActiveSong = ({uuid, artist_name, track_name}) => {
               setLyrics(data.lyrics);
               setIsLoading(false);
             }
+            setFetchedAPI(true);
           } else {
             navigate("/error", {
               state: {
@@ -81,9 +96,29 @@ const ActiveSong = ({uuid, artist_name, track_name}) => {
   }
 
   return (
-    <>
+    <div>
+      <Helmet>
+        <title>
+          {trackState} - {artistState} | {title}
+        </title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={imageUrl} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
+      </Helmet>
+
+      {fetchedAPI ? (
+        <div className="container mx-auto flex flex-col justify-center items-center pt-5 pb-36">
+          <title>
+            {" "}
+            {track_name} - {artist_name} | {process.env.REACT_APP_WEBSITE_NAME}
+          </title>
+          <Logo />
           {isLoading ? (
-            <div className="flex w-full justify-center items-center bg-gray-800 rounded">
+            <div className="flex w-full justify-center items-center bg-gray-800 rounded h-screen">
               <Loading />
             </div>
           ) : (
@@ -93,7 +128,7 @@ const ActiveSong = ({uuid, artist_name, track_name}) => {
                 lyrics={lyrics}
                 activeIndex={activeIndex}
               />
-              <div className="flex flex-col items-center text-center">
+              <div className="w-full md:w-2/3 flex flex-col items-center text-center">
                 <MusicPlayer
                   track_name={track_name}
                   artist_name={artist_name}
@@ -110,8 +145,15 @@ const ActiveSong = ({uuid, artist_name, track_name}) => {
             </>
           )}
 
-        </>
+          <Footer />
+        </div>
+      ) : (
+        <title>
+          {trackState} - {artistState} | {title}
+        </title>
+      )}
+    </div>
   );
 };
 
-export default ActiveSong;
+export default Song;

@@ -19,7 +19,7 @@ const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
   }
 
   return (
-    <div className="w-full text-center bg-gray-800 h-screen overflow-auto">
+    <div className="w-full text-center bg-gray-800">
       {lyrics.length > 0 ? (
         <ul ref={lyricsRef}>
           {lyrics.map((lyric, index) => (

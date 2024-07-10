@@ -1,12 +1,16 @@
 import React from "react";
-import {ReactComponent as LogoSVG} from "../icons/Logo.svg";
+import { useNavigate } from "react-router-dom";
+import LogoSVG from "../icons/Logo.svg";
 
-const Logo = ({ className }) => {
+const Logo = () => {
+  const navigate = useNavigate();
+
   return (
-    <LogoSVG
-      className={className}
+    <img
+      className="lg:w-2/6 md:w-3/6 w-5/6 mb-2 hover:cursor-pointer"
       alt={`${process.env.REACT_APP_WEBSITE_NAME} Logo`}
       src={LogoSVG}
+      onClick={() => navigate("/")}
     />
   );
 };

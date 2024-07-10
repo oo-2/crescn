@@ -2,8 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
-import PartyRoom from "./pages/PartyRoom";
-import ActiveSong from "./components/ActiveSong";
+import Song from "./pages/Song";
 import Terms from "./pages/Terms";
 import Error from "./pages/Error";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -13,8 +12,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/party/:inviteCode" element={<PartyRoom />} />
-        <Route exact path="/song/:uuid" element={<ActiveSong />} />
+        <Route exact path="/song/:uuid" element={<Song />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route
