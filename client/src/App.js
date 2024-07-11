@@ -13,7 +13,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/party/:inviteCode" element={<PartyRoom />} />
+        <Route exact path="/party/:roomId" element={<PartyRoom />} />
         <Route exact path="/song/:uuid" element={<ActiveSong />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />

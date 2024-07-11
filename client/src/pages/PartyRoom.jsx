@@ -1,33 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
-
+import { socket } from '../Socket';
 import Footer from "../components/Footer";
 import Logo from "../components/Logo";
 import CopyLink from "../components/CopyLinkButton";
 import ActiveSong from "../components/ActiveSong";
 import AddQueue from "../components/AddQueue";
 const PartyRoom = () => {
-  const { inviteCode } = useParams();
+  const { roomId } = useParams();
   const [queue, setQueue] = useState([]);
   const title = `${process.env.REACT_APP_WEBSITE_NAME}`;
   const description = "Come sing along on Crescn";
   const imageUrl = "https://crescn.app/logo192.png";
 
-  // const [peopleInRoom, setPeopleInRoom] = useState([
-  //   "👑 Sloth",
-  //   "Turtle 👑🦵",
-  //   "Snail 👑🦵",
-  //   "Slug 👑🦵",
-  //   "Koala 👑🦵",
-  //   "Tortoise 👑🦵",
-  //   "Loris 👑🦵",
-  //   "Gila Monster 👑🦵",
-  //   "Dugong 👑🦵",
-  //   "Manatee 👑🦵",
-  //   "Starfish 👑🦵",
-  // ]);
-  const [peopleInRoom, setPeopleInRoom] = useState(["👑 Sloth", "Turtle "]);
+  const [peopleInRoom, setPeopleInRoom] = useState([""]);
   const [activeSong, setActiveSong] = useState({
     id: null,
     artist: null,
@@ -52,7 +39,26 @@ const PartyRoom = () => {
       return prevQueue.filter((i) => i !== index);
     });
   };
+  useEffect(() => {
+    if (socket) {
+        socket.on('userJoined', () => {
+          socket.emit('userUpdate', roomId);
+        });
+        socket.on('users', (usernames) => {
+          console.log(usernames);
+          setPeopleInRoom(usernames);
+        });
 
+        socket.on('error', (error) => {
+            console.error('Error:', error);
+        });
+
+        return () => {
+            socket.off('users');
+            socket.off('error');
+        };
+    }
+}, );
   return (
     <section className="container mx-auto p-8">
       <Helmet>
@@ -110,7 +116,7 @@ const PartyRoom = () => {
           <div className="bg-gray-100 p-6 rounded-md mb-6">
             <h2 className="text-2xl font-bold mb-2">Users in the room</h2>
             <h4 className="text-sm font-light mb-4">
-              Invite Code: <b>{inviteCode} </b>
+              Invite Code: <b>{roomId} </b>
               <CopyLink />
             </h4>
             <ul className="overflow-y-auto h-64">

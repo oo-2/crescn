@@ -15,7 +15,7 @@ const Search = ({ InputStyle, InputPlaceholder, ButtonText, submitFunc   }) => {
 
           <input
             type="text"
-            name="search-input"
+            name="text-input"
             placeholder={InputPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
