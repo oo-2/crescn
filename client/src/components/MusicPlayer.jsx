@@ -3,11 +3,11 @@ import SkipButton from "./SkipButton";
 import PlayPauseButton from "./PlayPauseButton";
 import SeekBarSlider from "./SeekBarSlider";
 import VolumeSlider from "./VolumeSlider";
-import CopyLink from "./CopyLinkButton";
 import { useNavigate } from "react-router-dom";
 
 const MusicPlayer = ({
   track_name,
+  roomId,
   artist_name,
   audioRef,
   currentTime,
@@ -29,6 +29,7 @@ const MusicPlayer = ({
       setVolume(parseFloat(storedVolume));
       audioRef.current.volume = storedVolume / 100;
     }
+    
   }, [setVolume, audioRef]);
 
   const handleLoadedMetadata = (e) => {
@@ -83,6 +84,7 @@ const MusicPlayer = ({
             setCurrentTime={setCurrentTime}
             audioRef={audioRef}
             duration={duration}
+            roomId={roomId}
           />
         </div>
         <div className="">

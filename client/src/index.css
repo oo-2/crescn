@@ -12,6 +12,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.error {
+  color: #D8000C;
+}
+
 .loader {
   display: flex;
   justify-content: center;

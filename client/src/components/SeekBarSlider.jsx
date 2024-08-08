@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useEffect} from "react";
+import { socket } from "../Socket"
 
 function formatTime(time) {
   const minutes = Math.floor(time / 60);
@@ -6,11 +7,28 @@ function formatTime(time) {
   return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 }
 
-const SeekBarSlider = ({ currentTime, setCurrentTime, duration, audioRef }) => {
+const SeekBarSlider = ({ currentTime, setCurrentTime, duration, roomId, audioRef }) => {
+  useEffect(() => {
+    if (!audioRef.current) return;
+    if (socket.connected) {
+      socket.on("songUpdate", (data) => {
+        if (data.type === 0 || data.type === 3){
+          setCurrentTime(data.time);
+          audioRef.current.currentTime = data.time;
+        }
+      })
+    }
+    
+  }, [setCurrentTime, audioRef]);
+  
   const handleSeek = (event) => {
+    
     const time = event.target.value;
-    setCurrentTime(time);
-    audioRef.current.currentTime = time;
+    if (socket.connected) {
+      socket.emit("songTime", {roomId, time})
+      setCurrentTime(time);
+      audioRef.current.currentTime = time;
+    }
   };
   return (
     <>

@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Search = ({ InputStyle, InputPlaceholder, ButtonText, submitFunc   }) => {
-  const [query, setQuery] = useState("");
+const Search = ({ InputStyle, InputPlaceholder, ButtonText, submitFunc, query, setQuery   }) => {
 
   return (
     <>

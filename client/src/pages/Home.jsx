@@ -12,48 +12,39 @@ const Home = () => {
     const description = "Sing your heart out";
     const imageUrl = "https://crescn.app/logo192.png";
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState(localStorage.getItem("username") ? localStorage.getItem("username") : "");
     const [roomCode, setRoomCode] = useState("");
-
+    const [error, setError] = useState("");
     useEffect(() => {
-        if (socket) {
-            socket.on('roomCreated', (data) => {
-                navigate(`/party/${data.roomId}`);
-            });
+        socket.connect()
+        socket.on('roomCreated', (data) => {
+            localStorage.setItem("username", data.username);
+            navigate(`/party/${data.roomId}`);
+        });
 
-            socket.on('userJoined', (roomId) => {
-                console.log("hey")
-                navigate(`/party/${roomId}`);
-            });
+        socket.on('roomJoined', (data) => {
+            localStorage.setItem("username", data.username);
+            navigate(`/party/${data.roomId}`);
+        });
 
-            socket.on('error', (error) => {
-                console.error('Error:', error);
-            });
+        socket.on('error', (data) => {
+            setError(data.message)
+            console.error('Error: ', data.message);
+        });
 
-            return () => {
-                socket.off('roomCreated');
-                socket.off('userJoined');
-                socket.off('error');
-            };
-        }
-    }, [socket, navigate]);
+        return () => {
+            socket.off('roomCreated');
+            socket.off('userJoined');
+            socket.off('error');
+        };
+    }, [navigate]);
 
-    const handleJoinRoom = (roomCode) => {
-        if (roomCode && username) {
-            socket.connect()
-            socket.emit('joinRoom', { roomId: roomCode, username });
-        }
+    const handleJoinRoom = () => {
+        socket.emit('joinRoom', { roomId: roomCode, username });
     };
 
     const generateRoom = () => {
-      
-        if (username) {
-            socket.connect()
-            const newRoomCode = 'room-' + Math.random().toString(36).substr(2, 9); // Or generate room code on the server
-            socket.emit('createRoom', { roomId: newRoomCode, username });
-        } else {
-            console.log("Unable to generate room without username");
-        }
+        socket.emit('createRoom', { roomId: roomCode, username });
     };
 
     return (
@@ -93,9 +84,11 @@ const Home = () => {
                         InputPlaceholder="Enter Room Code"
                         InputStyle="w-2/5 bg-slate-800 rounded focus:ring-2 focus:ring-purple-700 focus:bg-opacity-50 hover:ring-1 hover:ring-purple-500 hover:bg-opacity-80 text-base text-gray-100 transition-colors duration-200 ease-linear"
                         submitFunc={handleJoinRoom}
-                        onInputChange={(e) => setRoomCode(e.target.value)}
+                        query={roomCode}
+                        setQuery={setRoomCode}
                     />
                 </div>
+                {error ? (<div class="error"> {error} </div>) : (<></>)}
                 <div className="container py-3 m-auto flex flex-row justify-center items-center">
                     <button
                         onClick={generateRoom}

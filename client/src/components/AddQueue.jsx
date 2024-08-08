@@ -3,6 +3,7 @@ import QueryForm from "./QueryForm";
 
 const AddQueue = ({ onClickResult }) => {
   const [results, setResults] = useState([]);
+  const [query, setQuery] = useState("");
   const [error, setError] = useState(null);
   const [showResults, setShowResults] = useState(false);
 
@@ -38,6 +39,8 @@ const AddQueue = ({ onClickResult }) => {
         ButtonText="Search"
         InputStyle="w-full bg-white rounded-md"
         InputPlaceholder={"Search for a song"}
+        query={query}
+        setQuery={setQuery}
         submitFunc={searchQuery}
       />
       {error && <p className="text-red-700">{error}</p>}

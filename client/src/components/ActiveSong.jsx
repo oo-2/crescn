@@ -5,9 +5,8 @@ import { isIE, isSafari, isMobileSafari } from "react-device-detect";
 import MusicPlayer from "./MusicPlayer";
 import Lyrics from "./Lyrics";
 import Loading from "./Loading";
-import Footer from "./Footer";
 
-const ActiveSong = ({uuid, artist_name, track_name}) => {
+const ActiveSong = ({uuid, artist_name, track_name, roomId}) => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
@@ -105,6 +104,7 @@ const ActiveSong = ({uuid, artist_name, track_name}) => {
                   handleTimeUpdate={handleTimeUpdate}
                   volume={volume}
                   setVolume={setVolume}
+                  roomId={roomId}
                 />
               </div>
             </>
