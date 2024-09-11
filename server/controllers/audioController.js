@@ -1,6 +1,7 @@
 const YoutubeMusicApi = require("youtube-music-api");
 const stringSimilarity = require("string-similarity");
-const ytdl = require("ytdl-core");
+const fs = require('fs');
+const ytdl = require("@distube/ytdl-core");
 
 const getAudio = async (req, res) => {
   const music = new YoutubeMusicApi();
@@ -16,9 +17,9 @@ const getAudio = async (req, res) => {
     .then((result) => {
       if (Object.values(result.content).length < 1) {
         res.status(404).json({ error: "Audio not found" });
+        console.log("Audio not found");
       } else {
         var songs = result.content;
-
         let bestMatch = songs[0];
         let bestMatchScore = 0;
         songs.forEach((song) => {
@@ -71,7 +72,7 @@ const getAudio = async (req, res) => {
       "Accept-Ranges": `bytes 0-${meta.contentLength}`,
     });
     const stream = ytdl(id, options).pipe(res);
-
+    stream.on('data', (chunk) => console.log(chunk));
     stream.on("error", (err) => {
       console.error("Error occurred during streaming:", err);
       res.status(500).send("An error occurred during streaming.");

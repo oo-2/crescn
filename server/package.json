@@ -9,6 +9,7 @@
     "dev": "concurrently \"npm run index\" \"cd ../client && npm start\" "
   },
   "dependencies": {
+    "@distube/ytdl-core": "^4.14.4",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
@@ -19,8 +20,7 @@
     "string-similarity": "^4.0.4",
     "throttle": "^1.0.3",
     "uuid": "^9.0.0",
-    "youtube-music-api": "^1.0.6",
-    "ytdl-core": "^4.11.5"
+    "youtube-music-api": "^1.0.6"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",

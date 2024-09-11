@@ -6,8 +6,10 @@ import VolumeSlider from "./VolumeSlider";
 import { useNavigate } from "react-router-dom";
 
 const MusicPlayer = ({
-  track_name,
+  
   roomId,
+  socket,
+  track_name,
   artist_name,
   audioRef,
   currentTime,
@@ -19,7 +21,7 @@ const MusicPlayer = ({
   handleTimeUpdate,
 }) => {
   const [buffering, setBuffering] = useState(false);
-  const [paused, setPaused] = useState(true);
+  const [paused, setPaused] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,27 +66,30 @@ const MusicPlayer = ({
         onLoadStart={() => setBuffering(true)}
         onSeeking={() => setBuffering(true)}
         onCanPlay={() => setBuffering(false)}
-        onEnded={() => setPaused(true)}
+        onEnded={() => setPaused(1)}
         onLoadedMetadata={handleLoadedMetadata}
       ></audio>
       <div className="m-1 flex justify-center align-middle">
-        <SkipButton seconds={-15} audioRef={audioRef} buffering={buffering} />
+        <SkipButton socket={socket} seconds={-15} audioRef={audioRef} buffering={buffering} roomId={roomId}/>
         <PlayPauseButton
           paused={paused}
           setPaused={setPaused}
           audioRef={audioRef}
           buffering={buffering}
+          roomId={roomId}
+          socket={socket}
         />
-        <SkipButton seconds={15} audioRef={audioRef} buffering={buffering} />
+        <SkipButton socket={socket} seconds={15} audioRef={audioRef} buffering={buffering} roomId={roomId}/>
       </div>
       <div className="w-full md:w-2/3 flex flex-row items-center text-center">
         <div className="container">
           <SeekBarSlider
+            socket={socket} 
+            roomId={roomId}
             currentTime={currentTime}
             setCurrentTime={setCurrentTime}
             audioRef={audioRef}
             duration={duration}
-            roomId={roomId}
           />
         </div>
         <div className="">

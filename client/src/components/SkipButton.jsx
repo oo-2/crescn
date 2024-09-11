@@ -2,10 +2,14 @@ import React from "react";
 import SkipForward from "../icons/SkipForward.svg";
 import SkipBackward from "../icons/SkipBackward.svg";
 
-const SkipButton = ({ seconds, buffering, audioRef }) => {
+const SkipButton = ({ socket, seconds, buffering, audioRef, roomId }) => {
   const skip = (seconds) => {
     if (!audioRef.current) return;
     audioRef.current.currentTime += seconds;
+    var time = audioRef.current.currentTime;
+    if (socket.connected) {
+      socket.emit("songTime", {roomId, time})
+      }
   };
   const buttonStyle = () => {
     return seconds < 0

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
+const Lyrics = ({ roomId, socket, audioRef, lyrics, activeIndex }) => {
   const lyricsRef = useRef(null);
 
   useEffect(() => {
@@ -15,7 +15,12 @@ const Lyrics = ({ audioRef, lyrics, activeIndex }) => {
   }, [activeIndex]);
 
   function handleLyricClick(startTimeMs, endTimeMs) {
-    if (endTimeMs) audioRef.current.currentTime = startTimeMs / 1000;
+    if (endTimeMs) {
+      const time = startTimeMs / 1000;
+      audioRef.current.currentTime = time;
+      if (socket.connected) 
+        socket.emit("songTime", {roomId, time})
+    }
   }
 
   return (

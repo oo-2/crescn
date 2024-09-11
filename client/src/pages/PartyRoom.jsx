@@ -33,8 +33,8 @@ const PartyRoom = () => {
     socket.emit("queueAdd", {roomId, song});
   };
 
-  const playSong = () => {
-    console.log(queue[0].id);
+  const playSong = (index) => {
+    socket.emit("queuePlay", {roomId, index});
   };
   const removeSong = (index) => {
     socket.emit("queueRemove", {roomId, index});
@@ -107,6 +107,7 @@ const PartyRoom = () => {
                     uuid={queue[0].id}
                     artist_name={queue[0].artist}
                     track_name={queue[0].track}
+                    socket={socket}
                     roomId={roomId}
                   />
                 </>
@@ -146,13 +147,13 @@ const PartyRoom = () => {
                     <div key={index} className="flex my-1">
                       <div className="flex items-center">
                         <button
-                          onClick={() => playSong(song)}
+                          onClick={() => playSong(index + 1)}
                           className="bg-purple-700 text-white py-1 px-4 rounded-md hover:bg-purple-800"
                         >
                           ▶
                         </button>
                         <button
-                          onClick={() => removeSong(song)}
+                          onClick={() => removeSong(index + 1)}
                           className="bg-purple-700 text-white py-1 px-2 rounded-md hover:bg-purple-800 ml-3 mr-3"
                         >
                           🗑️

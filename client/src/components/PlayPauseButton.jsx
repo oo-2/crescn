@@ -2,37 +2,41 @@ import React, { useEffect, useCallback } from "react";
 import Play from "../icons/Play.svg";
 import Pause from "../icons/Pause.svg";
 
-const PlayPauseButton = ({ paused, setPaused, buffering, audioRef }) => {
+const PlayPauseButton = ({ roomId, socket, paused, setPaused, buffering, audioRef }) => {
   const play = useCallback(() => {
     if (!audioRef.current) return;
-    setPaused(false);
+    setPaused(0);
     audioRef.current.play();
-  }, [setPaused, audioRef]);
+    if (socket.connected) {
+      const pause = 0;
+      socket.emit("songPaused", {roomId, pause});
+    }
+  }, [socket, setPaused, audioRef, roomId]);
 
   const pause = useCallback(() => {
     if (!audioRef.current) return;
-    setPaused(true);
+    setPaused(1);
     audioRef.current.pause();
-  }, [setPaused, audioRef]);
+    if (socket.connected) {
+      const pause = 1;
+      socket.emit("songPaused", {roomId, pause});
+    }
+  }, [socket, setPaused, audioRef, roomId]);
 
   useEffect(() => {
-    const handleKeydown = (event) => {
-      if (event.code === "Space") {
-        event.preventDefault();
-        if (!buffering) {
-          if (paused) {
-            play();
-          } else {
-            pause();
-          }
+    if (!audioRef.current) return;
+    if (socket.connected) {
+      socket.on("songUpdate", (data) => {
+        if (data.updateType === "pauseState") {
+          setPaused(data.pause);
+          data.pause ? audioRef.current.pause() : audioRef.current.play();
         }
-      }
-    };
-    window.addEventListener("keydown", handleKeydown);
-    return () => {
-      window.removeEventListener("keydown", handleKeydown);
-    };
-  }, [buffering, paused, pause, play]);
+
+        }
+    )
+    }
+    console.log(paused);
+  }, [socket, setPaused, paused, audioRef]);
 
   return (
     <button

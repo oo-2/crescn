@@ -6,7 +6,7 @@ import MusicPlayer from "./MusicPlayer";
 import Lyrics from "./Lyrics";
 import Loading from "./Loading";
 
-const ActiveSong = ({uuid, artist_name, track_name, roomId}) => {
+const ActiveSong = ({roomId, socket, uuid, artist_name, track_name}) => {
   const audioRef = useRef(null);
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(null);
@@ -69,8 +69,9 @@ const ActiveSong = ({uuid, artist_name, track_name, roomId}) => {
 
   function handleTimeUpdate() {
     if (!audioRef.current) return;
-    setCurrentTime(audioRef.current.currentTime);
-    const currentSecond = audioRef.current.currentTime * 1000;
+    const time = audioRef.current.currentTime
+    setCurrentTime(time);
+    const currentSecond = time * 1000;
     if (lyrics.length < 1) return;
     const index = lyrics.findIndex(
       (lyric) =>
@@ -88,12 +89,16 @@ const ActiveSong = ({uuid, artist_name, track_name, roomId}) => {
           ) : (
             <>
               <Lyrics
+                socket={socket}
+                roomId={roomId}
                 audioRef={audioRef}
                 lyrics={lyrics}
                 activeIndex={activeIndex}
               />
               <div className="flex flex-col items-center text-center">
                 <MusicPlayer
+                  roomId={roomId}
+                  socket={socket}
                   track_name={track_name}
                   artist_name={artist_name}
                   audioRef={audioRef}
@@ -104,7 +109,6 @@ const ActiveSong = ({uuid, artist_name, track_name, roomId}) => {
                   handleTimeUpdate={handleTimeUpdate}
                   volume={volume}
                   setVolume={setVolume}
-                  roomId={roomId}
                 />
               </div>
             </>

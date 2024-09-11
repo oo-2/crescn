@@ -220,6 +220,14 @@ socket.on('roomState', (data) => {
     io.in(data.roomId).emit('queueUpdate', {queue})
   });
 
+  socket.on("queuePlay", (data) => {
+    let song = rooms[data.roomId].queue.splice(data.index, 1)[0];
+    rooms[data.roomId].queue.splice(0,1);
+    rooms[data.roomId].queue.unshift(song);
+    const queue = rooms[data.roomId].queue;
+    io.in(data.roomId).emit('queueUpdate', {queue})
+  });
+
   socket.on("queueRemove", async (data) => {
     rooms[data.roomId].queue.splice(data.index,1);
     const queue = rooms[data.roomId].queue;
@@ -227,15 +235,15 @@ socket.on('roomState', (data) => {
   });
 
   socket.on("songPaused", (data) => {
-    /* TODO: */
+    const {roomId, pause} = data;
+    const updateType = "pauseState";
+    io.in(roomId).emit("songUpdate", {updateType, pause})
   });
 
   socket.on("songTime", (data) => {
-    /* TODO: */
     const {roomId, time} = data;
-    console.log(time);
-    const type = 0;
-    io.in(roomId).emit("songUpdate", {type, time})
+    const updateType = "timeState";
+    io.in(roomId).emit("songUpdate", {updateType, time})
   });
 
   socket.on("songState", (data) => {
