@@ -1,27 +1,16 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import Play from "../icons/Play.svg";
 import Pause from "../icons/Pause.svg";
 
 const PlayPauseButton = ({ roomId, socket, paused, setPaused, buffering, audioRef }) => {
-  const play = useCallback(() => {
+  const playPause = (pause) => {
     if (!audioRef.current) return;
-    setPaused(0);
-    audioRef.current.play();
     if (socket.connected) {
-      const pause = 0;
       socket.emit("songPaused", {roomId, pause});
+    } else {
+      console.error("You are not connected to the server.")
     }
-  }, [socket, setPaused, audioRef, roomId]);
-
-  const pause = useCallback(() => {
-    if (!audioRef.current) return;
-    setPaused(1);
-    audioRef.current.pause();
-    if (socket.connected) {
-      const pause = 1;
-      socket.emit("songPaused", {roomId, pause});
-    }
-  }, [socket, setPaused, audioRef, roomId]);
+  };
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -31,17 +20,15 @@ const PlayPauseButton = ({ roomId, socket, paused, setPaused, buffering, audioRe
           setPaused(data.pause);
           data.pause ? audioRef.current.pause() : audioRef.current.play();
         }
-
         }
     )
     }
-    console.log(paused);
   }, [socket, setPaused, paused, audioRef]);
 
   return (
     <button
       className="mx-1"
-      onClick={paused ? play : pause}
+      onClick={() => playPause(paused ? 0 : 1)}
       disabled={buffering}
     >
       <img

@@ -5,8 +5,7 @@ import SkipBackward from "../icons/SkipBackward.svg";
 const SkipButton = ({ socket, seconds, buffering, audioRef, roomId }) => {
   const skip = (seconds) => {
     if (!audioRef.current) return;
-    audioRef.current.currentTime += seconds;
-    var time = audioRef.current.currentTime;
+    var time = audioRef.current.currentTime + seconds;
     if (socket.connected) {
       socket.emit("songTime", {roomId, time})
       }

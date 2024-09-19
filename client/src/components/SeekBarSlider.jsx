@@ -26,8 +26,6 @@ const SeekBarSlider = ({ socket, currentTime, setCurrentTime, duration, roomId, 
     const time = event.target.value;
     if (socket.connected) {
       socket.emit("songTime", {roomId, time})
-      setCurrentTime(time);
-      audioRef.current.currentTime = time;
     }
   };
   return (
@@ -38,7 +36,7 @@ const SeekBarSlider = ({ socket, currentTime, setCurrentTime, duration, roomId, 
       <input
         type="range"
         id="slider"
-        className="mx-2 w-1/3 accent-violet-400 hover:accent-violet-700 duration-300 cursor-pointer"
+        className="mx-2 w-3/4 accent-violet-400 hover:accent-violet-700 duration-300 cursor-pointer"
         min="0"
         max={audioRef.current ? audioRef.current.duration : "0"}
         value={currentTime}

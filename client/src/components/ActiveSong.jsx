@@ -35,11 +35,21 @@ const ActiveSong = ({roomId, socket, uuid, artist_name, track_name}) => {
         .catch((error) => {
           console.error("Error:", error);
         })
-        .then((data) => {
+        .then(async (data) => {
           if (data && !data.error) {
             setDuration(data.duration / 1000);
             if (!data.lyrics.length) {
-              setTrackID(data.track_id);
+              if (data.track_id)
+                await fetch(`${process.env.REACT_APP_API_URL}/api/lyrics/${data.track_id}`)
+                  .then((res) => res.json())
+                  .catch((error) => {
+                    console.error("Error:", error);
+                  })
+                  .then((data) => {
+                    if (data) setLyrics(data);
+                    setIsLoading(false);
+                    setTrackID();
+                  });
             } else {
               setLyrics(data.lyrics);
               setIsLoading(false);
@@ -53,16 +63,7 @@ const ActiveSong = ({roomId, socket, uuid, artist_name, track_name}) => {
             });
           }
         });
-      if (track_id)
-        await fetch(`${process.env.REACT_APP_API_URL}/api/lyrics/${track_id}`)
-          .then((res) => res.json())
-          .catch((error) => {
-            console.error("Error:", error);
-          })
-          .then((data) => {
-            if (data) setLyrics(data);
-            setIsLoading(false);
-          });
+
     };
     fetchSong();
   }, [navigate, track_id, uuid]);
@@ -91,7 +92,6 @@ const ActiveSong = ({roomId, socket, uuid, artist_name, track_name}) => {
               <Lyrics
                 socket={socket}
                 roomId={roomId}
-                audioRef={audioRef}
                 lyrics={lyrics}
                 activeIndex={activeIndex}
               />

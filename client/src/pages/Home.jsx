@@ -19,12 +19,12 @@ const Home = () => {
         socket.connect()
         socket.on('roomCreated', (data) => {
             localStorage.setItem("username", data.username);
-            navigate(`/party/${data.roomId}`);
+            navigate(`/party/${encodeURIComponent(data.roomId)}`);
         });
 
         socket.on('roomJoined', (data) => {
             localStorage.setItem("username", data.username);
-            navigate(`/party/${data.roomId}`);
+            navigate(`/party/${encodeURIComponent(data.roomId)}`);
         });
 
         socket.on('error', (data) => {
@@ -75,6 +75,7 @@ const Home = () => {
                         type="text"
                         name="text-input"
                         placeholder={"Enter Username"}
+                        maxLength={15}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         className="w-1/2 bg-slate-800 rounded focus:ring-2 focus:ring-purple-700 focus:bg-opacity-50 hover:ring-1 hover:ring-purple-500 hover:bg-opacity-80 text-base text-gray-100 transition-colors duration-200 ease-linear"
@@ -85,6 +86,7 @@ const Home = () => {
                         InputStyle="w-2/5 bg-slate-800 rounded focus:ring-2 focus:ring-purple-700 focus:bg-opacity-50 hover:ring-1 hover:ring-purple-500 hover:bg-opacity-80 text-base text-gray-100 transition-colors duration-200 ease-linear"
                         submitFunc={handleJoinRoom}
                         query={roomCode}
+                        maxLength={8}
                         setQuery={setRoomCode}
                     />
                 </div>

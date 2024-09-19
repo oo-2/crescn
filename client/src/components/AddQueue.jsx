@@ -40,6 +40,7 @@ const AddQueue = ({ onClickResult }) => {
         InputStyle="w-full bg-white rounded-md"
         InputPlaceholder={"Search for a song"}
         query={query}
+        maxLength={32}
         setQuery={setQuery}
         submitFunc={searchQuery}
       />

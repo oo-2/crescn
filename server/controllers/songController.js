@@ -27,7 +27,7 @@ const searchSong = async (req, res) => {
     if (!error && response.statusCode === 200) {
       var token = body.access_token;
       var options = {
-        url: `https://api.spotify.com/v1/search?q=${encodeURI(
+        url: `https://api.spotify.com/v1/search?q=${encodeURIComponent(
           req.params.query
         )}&type=track`,
         headers: {
@@ -37,7 +37,7 @@ const searchSong = async (req, res) => {
       };
       request.get(options, function (error, response, body) {
         if (error) {
-          res.status(404).json({ error: "Lyrics not found" });
+          res.status(404).json({ error: "No results found" });
         } else {
           var results = body.tracks.items;
           results = results.slice(0, 10);

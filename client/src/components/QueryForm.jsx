@@ -1,6 +1,6 @@
 import React from "react";
 
-const Search = ({ InputStyle, InputPlaceholder, ButtonText, submitFunc, query, setQuery   }) => {
+const Search = ({ InputStyle, InputPlaceholder, ButtonText, submitFunc, query, setQuery, maxLength   }) => {
 
   return (
     <>
@@ -19,6 +19,7 @@ const Search = ({ InputStyle, InputPlaceholder, ButtonText, submitFunc, query, s
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className={InputStyle}
+            maxLength={maxLength}
           />
         <button
           type="submit"

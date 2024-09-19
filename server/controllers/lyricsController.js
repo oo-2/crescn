@@ -51,7 +51,7 @@ async function getLyrics(req, res) {
         }
       });
     } else {
-      res.json(['hey']);
+      res.json([]);
     }
   });
 }

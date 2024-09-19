@@ -2,12 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { socket } from "../Socket";
+import { ReactComponent as AnimatedTurnTable } from "../icons/AnimatedTurnTable.svg";
+import { ReactComponent as StaticTurnTable } from "../icons/StaticTurnTable.svg";
+import { ReactComponent as KickIcon } from "../icons/Kick.svg";
+import { ReactComponent as Headphones } from "../icons/Headphones.svg";
+import { ReactComponent as Trashbin } from "../icons/Trashbin.svg";
+import { ReactComponent as AdminCrown } from "../icons/AdminCrown.svg";
 import Footer from "../components/Footer";
 import Logo from "../components/Logo";
-import CopyLink from "../components/CopyLinkButton";
+import CopyClipboard from "../components/CopyClipboard";
 import ActiveSong from "../components/ActiveSong";
 import AddQueue from "../components/AddQueue";
 import Loading from "../components/Loading";
+const ADMIN = 3;
+const DJ = 2;
+const REGULAR = 1;
 
 const PartyRoom = () => {
   const { roomId } = useParams();
@@ -18,11 +27,8 @@ const PartyRoom = () => {
   const imageUrl = "https://crescn.app/logo192.png";
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState([]);
-  // const [activeSong, setActiveSong] = useState({
-  //   id: null,
-  //   artist: null,
-  //   track: null,
-  // });
+  const [privilege, setPrivilege] = useState(1);
+
   const addToQueueFromResults = (data) => {
     const { _id, artist_name, track_name } = data;
     const song = {
@@ -30,25 +36,32 @@ const PartyRoom = () => {
       artist: artist_name,
       track: track_name,
     };
-    socket.emit("queueAdd", {roomId, song});
+    socket.emit("queueAdd", { roomId, song });
   };
 
   const playSong = (index) => {
-    socket.emit("queuePlay", {roomId, index});
+    socket.emit("queuePlay", { roomId, index });
   };
   const removeSong = (index) => {
-    socket.emit("queueRemove", {roomId, index});
+    socket.emit("queueRemove", { roomId, index });
+  };
+  const userLevel = (index) => {
+    socket.emit("userLevel", { roomId, index });
+  };
+  const kickUser = (index) => {
+    socket.emit("kickUser", { roomId, index });
   };
   useEffect(() => {
     if (socket.connected) {
       setIsLoading(false);
-      if (!users.length) socket.emit("roomState", { roomId });
+      socket.emit("roomState", { roomId });
       socket.on("userUpdate", (data) => {
-        setUsers(data.usernames);
+        setUsers(data.users);
+        setPrivilege(users.find((user) => user.id === socket.id)?.privilege);
       });
 
       socket.on("queueUpdate", (data) => {
-        console.log("Queue updated!")
+        console.log("Queue updated!");
         setQueue(data.queue);
       });
 
@@ -56,15 +69,26 @@ const PartyRoom = () => {
         console.error("Error:", data.message);
       });
 
+      socket.on("disconnect", (data) => {
+        if (data === "io server disconnect")
+          navigate("/error", {
+            state: {
+              error: "Lost connection",
+              message:
+                "There were either network issues or you were removed from the room.",
+            },
+          });
+      });
       return () => {
         socket.off("userUpdate");
         socket.off("queueUpdate");
         socket.off("error");
+        socket.off("disconnect");
       };
     } else {
       navigate("/");
     }
-  }, [navigate, users.length, roomId]);
+  }, [navigate, users, roomId]);
   return (
     <section className="container mx-auto p-8">
       <Helmet>
@@ -109,6 +133,7 @@ const PartyRoom = () => {
                     track_name={queue[0].track}
                     socket={socket}
                     roomId={roomId}
+                    privilege={privilege}
                   />
                 </>
               ) : (
@@ -129,12 +154,59 @@ const PartyRoom = () => {
               <h2 className="text-2xl font-bold mb-2">Users in the room</h2>
               <h4 className="text-sm font-light mb-4">
                 Invite Code: <b>{roomId} </b>
-                <CopyLink />
+                <CopyClipboard text={roomId} />
               </h4>
               <ul className="overflow-y-auto h-64">
                 {users.map((person, index) => (
-                  <li key={index} className="mb-2">
-                    {person}
+                  <li
+                    key={index}
+                    className={`mb-2 flex items-center ${
+                      socket.id === person.id ? "font-bold" : ""
+                    }`}
+                  >
+                    {person.user}
+                    {person.privilege === ADMIN && (
+                      <div class="px-2">
+                        <AdminCrown />
+                      </div>
+                    )}
+                    {person.privilege === DJ && (
+                      <div class="px-2">
+                        <AnimatedTurnTable />
+                      </div>
+                    )}
+                    {person.privilege === REGULAR && (
+                      <div class="px-2">
+                        <Headphones />
+                      </div>
+                    )}
+                    {privilege === ADMIN && socket.id !== person.id && (
+                      <div className="ml-4">
+                        {person.privilege === REGULAR && (
+                          <button
+                            className="bg-purple-700 text-white stroke-white px-2 py-1 rounded mr-2"
+                            onClick={() => userLevel(index)}
+                          >
+                            <StaticTurnTable className="inline" /> Promote
+                          </button>
+                        )}
+                        {person.privilege === DJ && (
+                          <button
+                            className="bg-purple-700 text-white stroke-white px-2 py-1 rounded mr-2"
+                            onClick={() => userLevel(index)}
+                          >
+                            <Headphones className="inline" /> Demote
+                          </button>
+                        )}
+
+                        <button
+                          className="bg-red-700 text-white px-2 py-1 rounded"
+                          onClick={() => kickUser(index)}
+                        >
+                          <KickIcon className="inline" /> Kick
+                        </button>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -146,18 +218,22 @@ const PartyRoom = () => {
                   {queue.slice(1).map((song, index) => (
                     <div key={index} className="flex my-1">
                       <div className="flex items-center">
-                        <button
-                          onClick={() => playSong(index + 1)}
-                          className="bg-purple-700 text-white py-1 px-4 rounded-md hover:bg-purple-800"
-                        >
-                          ▶
-                        </button>
-                        <button
-                          onClick={() => removeSong(index + 1)}
-                          className="bg-purple-700 text-white py-1 px-2 rounded-md hover:bg-purple-800 ml-3 mr-3"
-                        >
-                          🗑️
-                        </button>
+                        {privilege >= DJ && (
+                          <>
+                            <button
+                              onClick={() => playSong(index + 1)}
+                              className="bg-purple-700 text-white py-1 px-4 rounded-md hover:bg-purple-800"
+                            >
+                              ▶
+                            </button>
+                            <button
+                              onClick={() => removeSong(index + 1)}
+                              className="bg-purple-700 text-white py-1 px-2 rounded-md hover:bg-purple-800 ml-3 mr-3"
+                            >
+                              <Trashbin />
+                            </button>
+                          </>
+                        )}
                         {index + 1}.
                       </div>
                       <div className="marquee ml-1">
@@ -173,7 +249,9 @@ const PartyRoom = () => {
                 <p className="text-lg font-light h-64">Song queue is empty</p>
               )}
             </div>
-            <AddQueue onClickResult={addToQueueFromResults} />
+            {privilege >= DJ && (
+              <AddQueue onClickResult={addToQueueFromResults} />
+            )}
           </div>
         </div>
       )}

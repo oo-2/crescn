@@ -3,12 +3,12 @@ import React, { useState } from "react";
 import { ReactComponent as Clipboard } from "../icons/Clipboard.svg";
 import { ReactComponent as ClipboardCheck } from "../icons/ClipboardCheck.svg";
 
-const CopyLink = ({fillColor}) => {
+const CopyClipboard = ({fillColor, text}) => {
   const [isClicked, setIsClicked] = useState(false);
 
   const handleShareClick = () => {
-    navigator.clipboard.writeText(window.location.href).catch((error) => {
-      console.error("Failed to copy URL to clipboard:", error);
+    navigator.clipboard.writeText(text).catch((error) => {
+      console.error("Failed to copy Code to clipboard:", error);
       alert("Could not copy to clipboard.");
       return;
     });
@@ -34,4 +34,4 @@ const CopyLink = ({fillColor}) => {
   );
 };
 
-export default CopyLink;
+export default CopyClipboard;

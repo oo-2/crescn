@@ -3,10 +3,8 @@ import SkipButton from "./SkipButton";
 import PlayPauseButton from "./PlayPauseButton";
 import SeekBarSlider from "./SeekBarSlider";
 import VolumeSlider from "./VolumeSlider";
-import { useNavigate } from "react-router-dom";
 
 const MusicPlayer = ({
-  
   roomId,
   socket,
   track_name,
@@ -22,7 +20,6 @@ const MusicPlayer = ({
 }) => {
   const [buffering, setBuffering] = useState(false);
   const [paused, setPaused] = useState(1);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!audioRef.current) return;
@@ -31,21 +28,21 @@ const MusicPlayer = ({
       setVolume(parseFloat(storedVolume));
       audioRef.current.volume = storedVolume / 100;
     }
-    
   }, [setVolume, audioRef]);
 
   const handleLoadedMetadata = (e) => {
     setDuration(e.target.duration);
   };
 
+  const endofSong = (index) => {
+    if (socket.connected)
+    socket.emit("queueRemove", {roomId, index});
+    const pause = 0;
+    socket.emit("songPaused", {roomId, pause});
+  };
+
   const handleAudioError = (error) => {
     console.error("Audio stream could not be retrieved:", error);
-    navigate("/error", {
-      state: {
-        error: "Audio stream failed",
-        message: "Sorry about that, please try again later.",
-      },
-    });
   };
 
   return (
@@ -66,11 +63,18 @@ const MusicPlayer = ({
         onLoadStart={() => setBuffering(true)}
         onSeeking={() => setBuffering(true)}
         onCanPlay={() => setBuffering(false)}
-        onEnded={() => setPaused(1)}
+        onEnded={() => endofSong(0)}
         onLoadedMetadata={handleLoadedMetadata}
       ></audio>
       <div className="m-1 flex justify-center align-middle">
-        <SkipButton socket={socket} seconds={-15} audioRef={audioRef} buffering={buffering} roomId={roomId}/>
+        <SkipButton
+          socket={socket}
+          seconds={-15}
+          audioRef={audioRef}
+          buffering={buffering}
+          roomId={roomId}
+          
+        />
         <PlayPauseButton
           paused={paused}
           setPaused={setPaused}
@@ -79,12 +83,18 @@ const MusicPlayer = ({
           roomId={roomId}
           socket={socket}
         />
-        <SkipButton socket={socket} seconds={15} audioRef={audioRef} buffering={buffering} roomId={roomId}/>
+        <SkipButton
+          socket={socket}
+          seconds={15}
+          audioRef={audioRef}
+          buffering={buffering}
+          roomId={roomId}
+        />
       </div>
-      <div className="w-full md:w-2/3 flex flex-row items-center text-center">
-        <div className="container">
+      <div className="w-full flex flex-row justify-center">
+        <div className="container w-full md:w-2/3">
           <SeekBarSlider
-            socket={socket} 
+            socket={socket}
             roomId={roomId}
             currentTime={currentTime}
             setCurrentTime={setCurrentTime}
@@ -92,13 +102,11 @@ const MusicPlayer = ({
             duration={duration}
           />
         </div>
-        <div className="">
-          <VolumeSlider
+        <VolumeSlider
             volume={volume}
             setVolume={setVolume}
             audioRef={audioRef}
           />
-        </div>
       </div>
     </section>
   );

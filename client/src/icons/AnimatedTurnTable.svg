@@ -1,0 +1,16 @@
+<svg stroke="currentColor" fill="currentColor" height="24px" width="24px" viewBox="0 0 508 508"
+  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+  <circle r="232" cx="254" cy="254" stroke-width="32" fill="none" />
+  <circle r="58" cx="254" cy="254" stroke-width="32" fill="none" />
+  <polyline stroke-width="15" fill="none" points="415,20,420,150,380,170" />
+  <circle cx="380" cy="170" r="15" />
+  <rect x="390" width="50" height="25" rx="3" ry="4" />
+  <path d="
+    M 140,120
+    a232,232 0 0 0 -60,90
+    " stroke-width="20" fill="none">
+    <animateTransform attributeName="transform" type="rotate" from="0 254 254" to="360 254 254" dur="2s"
+      repeatCount="indefinite" />
+  </path>
+
+</svg>
